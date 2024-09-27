@@ -1,7 +1,6 @@
 from django.db import models
 from .user import User
 from .address import Address
-from .user_address import UserAddress
 from .address_type import AddressType
 
 class UserAddress(models.Model):
