@@ -6,8 +6,8 @@ import uuid
 
 class PatientData(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    patient = models.ForeignKey(User, on_delete=models.CASCADE)
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="personal_patient_data")
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name="attached_patient_data")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_patient_data")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="updated_patient_data")
     created_timestamp = models.DateTimeField(auto_now_add=True)
