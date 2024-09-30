@@ -7,6 +7,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
+    date_of_birth = models.DateField()
     role = models.ForeignKey(Group, on_delete=models.PROTECT)
     is_active = models.BooleanField(default=True)
     created_timestamp = models.DateTimeField(auto_now_add=True)
