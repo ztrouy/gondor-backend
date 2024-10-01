@@ -7,23 +7,6 @@ from django.contrib.auth.models import Group
 from gondorapi.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
-    fullName = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = ["id", "first_name", "last_name", "fullName", "primaryAddress", "dateOfBirth", "role"]
-
-    def get_fullName(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["firstName"] = rep.pop["first_name"]
-        rep["lastName"] = rep.pop["last_name"]
-        return rep
-
-
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -49,11 +32,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserViewSet(viewsets.ViewSet):
+class AuthViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
     
     @action(detail=False, methods=["post"], url_path="register")
-    def register_account(self, request):
+    def register_patient(self, request):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():            
             user = serializer.save()
