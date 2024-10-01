@@ -49,3 +49,17 @@ class AuthViewSet(viewsets.ViewSet):
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=["post"], url_path="login")
+    def login(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        
+        user = authenticate(email=email, password=password)
+
+        if user:
+            token = Token.objects.get(user=user)
+            return Response({"token": token.key}, status=status.HTTP_200_OK)
+        
+        else:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
