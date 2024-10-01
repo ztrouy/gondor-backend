@@ -111,6 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# User UUID Token Compatibility
+AUTH_USER_MODEL = "gondorapi.User"
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
