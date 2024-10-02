@@ -49,3 +49,7 @@ class UserViewSet(viewsets.ViewSet):
     
     @action(detail=False, method=["put"], url_path="edit-name")
     def update(self, request):
+        serializer = UserEditSerializer(request.user, request.data)
+        if serializer.is_valid():
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
