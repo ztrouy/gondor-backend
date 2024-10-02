@@ -28,7 +28,5 @@ class UserSerializer(serializers.ModelSerializer):
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
     def get_my_details(self, request):
-        # users = User.objects.all()
-        # user = users.get_object_or_404(users, pk=pk)
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
