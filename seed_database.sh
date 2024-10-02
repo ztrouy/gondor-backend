@@ -14,6 +14,7 @@ python manage.py loaddata patient_clinicians
 
 python manage.py seed_appointments
 python manage.py seed_patient_data
+python manage.py seed_logs
 
 python manage.py migrate
 
