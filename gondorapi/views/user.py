@@ -2,6 +2,7 @@ from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from gondorapi.models import User
+from django.contrib.auth.hashers import check_password
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField()
@@ -18,7 +19,13 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return super().to_internal_value(data)
     
     def update(self, instance, validated_data):
-        pass
+        validation_errors = check_password(validated_data["old_password"], instance.password)
+        if not validation_errors:
+            raise serializers.ValidationError("Old password does not match current password.")
+
+        instance.set_password(validated_data["new_password"])
+        instance.save()
+        return instance
 
 class UserEditSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,3 +81,10 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=["put"], url_path="change-password")
+    def change_password(self, request):
+        serializer = ChangePasswordSerializer(request.user, request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
