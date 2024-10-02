@@ -10,6 +10,7 @@ python manage.py loaddata states
 python manage.py loaddata address_types
 python manage.py loaddata addresses
 python manage.py loaddata user_addresses
+python manage.py loaddata patient_clinicians
 
 python manage.py migrate
 
