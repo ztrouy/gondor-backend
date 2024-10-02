@@ -12,6 +12,8 @@ python manage.py loaddata addresses
 python manage.py loaddata user_addresses
 python manage.py loaddata patient_clinicians
 
+python manage.py seed_appointments
+
 python manage.py migrate
 
 python manage.py loaddata tokens
