@@ -19,7 +19,6 @@ class StateSerializer(serializers.ModelSerializer):
 
 
 class StateViewSet(viewsets.ViewSet):
-    
     def list(self, request):
         states = State.objects.all()
         serializer = StateSerializer(states, many=True)
