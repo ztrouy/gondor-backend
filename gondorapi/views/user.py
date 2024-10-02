@@ -1,9 +1,6 @@
-from rest_framework import viewsets, status, serializers, permissions
+from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import Group
 from gondorapi.models import User
 
 
