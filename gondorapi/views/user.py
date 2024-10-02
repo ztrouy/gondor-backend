@@ -3,6 +3,23 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from gondorapi.models import User
 
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField()
+    new_password = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ["old_password", "new_password"]
+    
+    def to_internal_value(self, data):
+        data = data.copy()
+        data["old_password"] = data.pop("oldPassword")
+        data["new_password"] = data.pop("newPassword")
+        return super().to_internal_value(data)
+    
+    def update(self, instance, validated_data):
+        pass
+
 class UserEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -55,3 +72,5 @@ class UserViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=["put"], url_path="change-password")
