@@ -47,9 +47,10 @@ class UserViewSet(viewsets.ViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    @action(detail=False, method=["put"], url_path="edit-name")
-    def update(self, request):
+    @action(detail=False, methods=["put"], url_path="edit-account")
+    def edit_account(self, request):
         serializer = UserEditSerializer(request.user, request.data)
         if serializer.is_valid():
+            serializer.save()
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
