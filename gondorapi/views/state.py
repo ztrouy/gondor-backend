@@ -12,6 +12,11 @@ class StateSerializer(serializers.ModelSerializer):
         model = State
         fields = ["state_code", "name"]
     
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["stateCode"] = rep.pop("state_code")
+        return rep
+
     # def to_internal_value(self, data):
     #     data = data.copy()
     #     data["first_name"] = data.pop("firstName")
@@ -34,8 +39,8 @@ class StateViewSet(viewsets.ViewSet):
     
     def list(self, request):
         states = State.objects.all()
-        serializer = StateSerializer(states)
-        return Response(serializer.data)
+        serializer = StateSerializer(states, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     # @action(detail=False, methods=["post"], url_path="register")
     # def register_patient(self, request):
