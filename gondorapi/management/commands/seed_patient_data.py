@@ -36,9 +36,12 @@ class Command(BaseCommand):
                 
                 now = make_aware(datetime.datetime.now())
                 max_seconds = int((now - created_timestamp).total_seconds())
-                updated_timestamp = created_timestamp + datetime.timedelta(
-                    seconds=random.randint(1, max_seconds)
-                )
+                if max_seconds > 0:
+                    updated_timestamp = created_timestamp + datetime.timedelta(
+                        seconds=random.randint(1, max_seconds)
+                    )
+                else:
+                    updated_timestamp = created_timestamp
             
             weight_notes = "Patient is a healthy weight."
             if patient_weight_kg < 58:
@@ -70,7 +73,7 @@ class Command(BaseCommand):
                 patient_systolic = patient_systolic,
                 patient_diastolic = patient_diastolic,
                 patient_weight_kg = patient_weight_kg,
-                clinician_notes = weight_notes + bp_notes + secret_notes,
+                clinician_notes = f"{weight_notes} {bp_notes} {secret_notes}",
                 is_notes_shared = is_notes_shared
             )
             patient_datas.append(patient_data)
