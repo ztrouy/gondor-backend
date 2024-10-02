@@ -16,10 +16,10 @@ class UserEditSerializer(serializers.ModelSerializer):
         return super().to_internal_value(data)
 
     def update(self, instance, validated_data):
-        instance.email = validated_data.get("email", instance.email)
-        instance.first_name = validated_data.get("first_name", instance.first_name)
-        instance.last_name = validated_data.get("last_name", instance.last_name)
-        instance.date_of_birth = validated_data.get("date_of_birth", instance.date_of_birth)
+        instance.email = validated_data["email"]
+        instance.first_name = validated_data["first_name"]
+        instance.last_name = validated_data["last_name"]
+        instance.date_of_birth = validated_data["date_of_birth"]
         instance.save()
         return instance
 
@@ -53,4 +53,5 @@ class UserViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
