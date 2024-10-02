@@ -35,7 +35,6 @@ class StateSerializer(serializers.ModelSerializer):
 
 
 class StateViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.AllowAny]
     
     def list(self, request):
         states = State.objects.all()
