@@ -67,4 +67,4 @@ class Command(BaseCommand):
                 appointments.append(appointment)
 
         Appointment.objects.bulk_create(appointments)
-        self.stdout.write(self.style.SUCCESS('Successfully seeded appointments'))
+        self.stdout.write(self.style.SUCCESS("Successfully seeded appointments"))
