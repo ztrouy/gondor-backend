@@ -1,0 +1,373 @@
+[
+    {
+        "model": "gondorapi.state",
+        "pk": "AL",
+        "fields": {
+            "name": "Alabama"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "AK",
+        "fields": {
+            "name": "Alaska"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "AZ",
+        "fields": {
+            "name": "Arizona"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "AR",
+        "fields": {
+            "name": "Arkansas"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "CA",
+        "fields": {
+            "name": "California"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "CO",
+        "fields": {
+            "name": "Colorado"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "CT",
+        "fields": {
+            "name": "Connecticut"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "DE",
+        "fields": {
+            "name": "Delaware"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "DC",
+        "fields": {
+            "name": "District of Columbia"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "FL",
+        "fields": {
+            "name": "Florida"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "GA",
+        "fields": {
+            "name": "Georgia"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "HI",
+        "fields": {
+            "name": "Hawaii"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "ID",
+        "fields": {
+            "name": "Idaho"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "IL",
+        "fields": {
+            "name": "Illinois"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "IN",
+        "fields": {
+            "name": "Indiana"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "IA",
+        "fields": {
+            "name": "Iowa"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "KS",
+        "fields": {
+            "name": "Kansas"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "KY",
+        "fields": {
+            "name": "Kentucky"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "LA",
+        "fields": {
+            "name": "Louisiana"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "ME",
+        "fields": {
+            "name": "Maine"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MD",
+        "fields": {
+            "name": "Maryland"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MA",
+        "fields": {
+            "name": "Massachusetts"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MI",
+        "fields": {
+            "name": "Michigan"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MN",
+        "fields": {
+            "name": "Minnesota"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MS",
+        "fields": {
+            "name": "Mississippi"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MO",
+        "fields": {
+            "name": "Missouri"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "MT",
+        "fields": {
+            "name": "Montana"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NE",
+        "fields": {
+            "name": "Nebraska"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NV",
+        "fields": {
+            "name": "Nevada"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NH",
+        "fields": {
+            "name": "New Hampshire"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NJ",
+        "fields": {
+            "name": "New Jersey"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NM",
+        "fields": {
+            "name": "New Mexico"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NY",
+        "fields": {
+            "name": "New York"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "NC",
+        "fields": {
+            "name": "North Carolina"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "ND",
+        "fields": {
+            "name": "North Dakota"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "OH",
+        "fields": {
+            "name": "Ohio"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "OK",
+        "fields": {
+            "name": "Oklahoma"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "OR",
+        "fields": {
+            "name": "Oregon"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "PA",
+        "fields": {
+            "name": "Pennsylvania"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "PR",
+        "fields": {
+            "name": "Puerto Rico"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "RI",
+        "fields": {
+            "name": "Rhode Island"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "SC",
+        "fields": {
+            "name": "South Carolina"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "SD",
+        "fields": {
+            "name": "South Dakota"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "TN",
+        "fields": {
+            "name": "Tennessee"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "TX",
+        "fields": {
+            "name": "Texas"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "UT",
+        "fields": {
+            "name": "Utah"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "VT",
+        "fields": {
+            "name": "Vermont"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "VA",
+        "fields": {
+            "name": "Virginia"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "VI",
+        "fields": {
+            "name": "Virgin Islands"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "WA",
+        "fields": {
+            "name": "Washington"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "WV",
+        "fields": {
+            "name": "West Virginia"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "WI",
+        "fields": {
+            "name": "Wisconsin"
+        }
+    },
+    {
+        "model": "gondorapi.state",
+        "pk": "WY",
+        "fields": {
+            "name": "Wyoming"
+        }
+    }
+]
