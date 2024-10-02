@@ -1,0 +1,23 @@
+[
+    {
+        "model": "gondorapi.addresstype",
+        "pk": 1,
+        "fields": {
+            "name": "Primary Address"
+        }
+    },
+    {
+        "model": "gondorapi.addresstype",
+        "pk": 2,
+        "fields": {
+            "name": "Shipping Address"
+        }
+    },
+    {
+        "model": "gondorapi.addresstype",
+        "pk": 3,
+        "fields": {
+            "name": "Billing Address"
+        }
+    }
+]
