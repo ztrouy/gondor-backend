@@ -1,0 +1,182 @@
+[
+    {
+        "model": "gondorapi.user",
+        "pk": "3bc6e226eb4443cd9e446dbd0f7b5efd",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$D8oETj7FfjF8Tbu7LIYHsq$nop3Ki+d8bVOVdO2+Vv/ei7Ee7sUV5Htspyx+qBTmp8=",
+            "last_login": null,
+            "username": "admina@strator.com",
+            "first_name": "Admina",
+            "last_name": "Strator",
+            "email": "admina@strator.com",
+            "date_of_birth": "1985-06-15",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T09:43:25.740029Z",
+            "updated_timestamp": "2024-10-02T09:43:25.740029Z",
+            "groups": [1, 4],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "d3ef4f3485f54c5e897e4d11ec7a2186",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$n0wgu5OXyB3wiwWB8anP7k$sYulkTqN6Nj7TVRzIwImhXpM7C7rXPrDGA+IbvmhrLU=",
+            "last_login": null,
+            "username": "john@doe.com",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john@doe.com",
+            "date_of_birth": "1991-03-28",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T10:01:06.380605Z",
+            "updated_timestamp": "2024-10-02T10:01:06.380605Z",
+            "groups": [1, 2],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "68538e005a104012adf24f56f8b909e4",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$9SN8sB1lCbIFIvCoTl1vjf$bBO8X5zzYU6HSmUbv8GmSNfiAZTFkYNg1WSUG0ATCLI=",
+            "last_login": null,
+            "username": "jane@doe.com",
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "jane@doe.com",
+            "date_of_birth": "1990-11-07",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T10:05:20.408189Z",
+            "updated_timestamp": "2024-10-02T10:05:20.408189Z",
+            "groups": [1, 2],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "69a896e32a364a268bd1eac7e83c80ad",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$8I00aCmFo1YZOAzUwPse10$U5Qj56F4EnCRHlmp8bfM91GS/Wgxsg9cAzM+uIMgWsc=",
+            "last_login": null,
+            "username": "ryan@tanay.com",
+            "first_name": "Ryan",
+            "last_name": "Tanay",
+            "email": "ryan@tanay.com",
+            "date_of_birth": "1987-06-16",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T10:11:30.557028Z",
+            "updated_timestamp": "2024-10-02T10:11:30.557028Z",
+            "groups": [1, 3],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "fe15a1cdcb1244239e2788356a383044",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$M5DRBqquqG7DDEHpXRrmB7$2Za4cTnhZ2gw3kRzndYak7GjxBnaw9+lWMS2oddIYOU=",
+            "last_login": null,
+            "username": "meg@ducharme.com",
+            "first_name": "Meg",
+            "last_name": "Ducharme",
+            "email": "meg@ducharme.com",
+            "date_of_birth": "1985-02-03",
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T17:48:58.123965Z",
+            "updated_timestamp": "2024-10-02T17:48:58.123965Z",
+            "groups": [1],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "985e67e2b46a4ed2b3004274c1149b4a",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$flkhF5Yh76W1EvdoGvWOBF$mEqXvJUU94VeED1dgNEE5wH+pWbRHZOQnCNfpkFp0ik=",
+            "last_login": null,
+            "username": "jenna@solis.com",
+            "first_name": "Jenna",
+            "last_name": "Solis",
+            "email": "jenna@solis.com",
+            "date_of_birth": "1997-12-17",
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T17:49:38.431029Z",
+            "updated_timestamp": "2024-10-02T17:49:38.431029Z",
+            "groups": [1],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "69dde221df2d47f988e3a08672264d5d",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$7zfBsAIt8TRcCaLxmf5aDN$UJUtCSBTqt6C7WMrUck+Wr0mhy74qPRuJQ9clA7pmTM=",
+            "last_login": null,
+            "username": "bryan@nilson.com",
+            "first_name": "Bryan",
+            "last_name": "Nilson",
+            "email": "bryan@nilson.com",
+            "date_of_birth": "1963-05-02",
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T17:50:15.178428Z",
+            "updated_timestamp": "2024-10-02T17:50:15.178428Z",
+            "groups": [1],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "7a3cf9d96c7b430fa1a0a18497cb9940",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$CO3JeTIx56hctTScpDOO7V$bIIu5RbIqsLpXR8jZP3K6jMDBP3oJseyqMwm7FcDulA=",
+            "last_login": null,
+            "username": "emily@lemmon.com",
+            "first_name": "Emily",
+            "last_name": "Lemmon",
+            "email": "emily@lemmon.com",
+            "date_of_birth": "1993-07-29",
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T17:51:01.377886Z",
+            "updated_timestamp": "2024-10-02T17:51:01.377886Z",
+            "groups": [1],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "gondorapi.user",
+        "pk": "5a7598b0537b4702b0f11e5eb343722c",
+        "fields": {
+            "password": "pbkdf2_sha256$870000$ckxZKm3k7i3RYsvQlH3Sti$0/Va6gjb/I+xV0YDTrkgkF9BAtl5RJzCXT8B6iTO0po=",
+            "last_login": null,
+            "username": "tyler@hillard.com",
+            "first_name": "Ryan",
+            "last_name": "Tanay",
+            "email": "tyler@hillard.com",
+            "date_of_birth": "2001-04-11",
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "created_timestamp": "2024-10-02T17:51:42.208325Z",
+            "updated_timestamp": "2024-10-02T17:51:42.208325Z",
+            "groups": [1],
+            "user_permissions": []
+        }
+    }
+]

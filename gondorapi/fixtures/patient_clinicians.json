@@ -1,0 +1,98 @@
+[
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "5018efcba9114e5f999af6e89829cab6",
+        "fields": {
+            "patient": "3bc6e226eb4443cd9e446dbd0f7b5efd",
+            "clinician": "68538e005a104012adf24f56f8b909e4"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "0de51a73908340e589d96b2f69baa4bb",
+        "fields": {
+            "patient": "3bc6e226eb4443cd9e446dbd0f7b5efd",
+            "clinician": "d3ef4f3485f54c5e897e4d11ec7a2186"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "6d33cec08b374b5383d71dd70228c6dd",
+        "fields": {
+            "patient": "d3ef4f3485f54c5e897e4d11ec7a2186",
+            "clinician": "68538e005a104012adf24f56f8b909e4"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "85ead14f316a46fc94f2dfe189ea7832",
+        "fields": {
+            "patient": "68538e005a104012adf24f56f8b909e4",
+            "clinician": "d3ef4f3485f54c5e897e4d11ec7a2186"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "8dd9bf4dff434dd292b5a5c211c86909",
+        "fields": {
+            "patient": "69a896e32a364a268bd1eac7e83c80ad",
+            "clinician": "d3ef4f3485f54c5e897e4d11ec7a2186"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "faaca5be797a4af6bae5c141398c2f86",
+        "fields": {
+            "patient": "fe15a1cdcb1244239e2788356a383044",
+            "clinician": "68538e005a104012adf24f56f8b909e4"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "2c2b65cbdd5b4d13992713c7e38c1929",
+        "fields": {
+            "patient": "985e67e2b46a4ed2b3004274c1149b4a",
+            "clinician": "68538e005a104012adf24f56f8b909e4"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "3d05ba794a3a4c49bca58f85537e6116",
+        "fields": {
+            "patient": "985e67e2b46a4ed2b3004274c1149b4a",
+            "clinician": "d3ef4f3485f54c5e897e4d11ec7a2186"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "1bb77cd5514240768bbce687977df3b7",
+        "fields": {
+            "patient": "69dde221df2d47f988e3a08672264d5d",
+            "clinician": "d3ef4f3485f54c5e897e4d11ec7a2186"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "3289509739694dfba513c08785f957dd",
+        "fields": {
+            "patient": "7a3cf9d96c7b430fa1a0a18497cb9940",
+            "clinician": "d3ef4f3485f54c5e897e4d11ec7a2186"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "dac63d0a2cef4af39b7a2ff0d2c0732e",
+        "fields": {
+            "patient": "7a3cf9d96c7b430fa1a0a18497cb9940",
+            "clinician": "68538e005a104012adf24f56f8b909e4"
+        }
+    },
+    {
+        "model": "gondorapi.patientclinician",
+        "pk": "425577f947fa46ce86683d05d067bccf",
+        "fields": {
+            "patient": "5a7598b0537b4702b0f11e5eb343722c",
+            "clinician": "68538e005a104012adf24f56f8b909e4"
+        }
+    }
+]

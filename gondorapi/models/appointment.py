@@ -10,4 +10,5 @@ class Appointment(models.Model):
     is_approved = models.BooleanField(default=False)
     is_checked_in = models.BooleanField(default=False)
     created_timestamp = models.DateTimeField(auto_now_add=True)
+    approved_timestamp = models.DateTimeField(auto_now=True)
     scheduled_timestamp = models.DateTimeField()
