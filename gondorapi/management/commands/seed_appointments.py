@@ -6,7 +6,7 @@ import datetime
 import random
 
 class Command(BaseCommand):
-    help = 'Seed appointments for users with group "Patient"'
+    help = "Seed Appointments for Users with the Group 'Patient'"
 
     def handle(self, *args, **kwargs):
         clinician_group = Group.objects.get(name="Clinician")
