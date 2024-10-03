@@ -13,6 +13,7 @@ python manage.py loaddata user_addresses
 python manage.py loaddata patient_clinicians
 
 python manage.py seed_appointments
+python manage.py seed_reschedule_requests
 python manage.py seed_patient_data
 python manage.py seed_logs
 
