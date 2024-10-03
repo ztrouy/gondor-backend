@@ -79,5 +79,5 @@ class Command(BaseCommand):
             patient_datas.append(patient_data)
         
         PatientData.objects.bulk_create(patient_datas)
-        self.stdout.write(self.style.SUCCESS("Successfully seeded Patient Data"))
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded {len(patient_datas)} Patient Data"))
             

@@ -65,4 +65,4 @@ class Command(BaseCommand):
                 requests.append(request)
         
         RescheduleRequest.objects.bulk_create(requests)
-        self.stdout.write(self.style.SUCCESS("Successfully seeded Reschedule Requests"))
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded {len(requests)} Reschedule Request(s)"))

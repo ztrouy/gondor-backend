@@ -48,4 +48,4 @@ class Command(BaseCommand):
                 logs.append(log)
         
         Log.objects.bulk_create(logs)
-        self.stdout.write(self.style.SUCCESS("Successfully seeded Logs"))
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded {len(logs)} Log(s)"))
