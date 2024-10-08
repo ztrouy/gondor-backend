@@ -30,6 +30,17 @@ class UserCreateSerializer(serializers.ModelSerializer):
             date_of_birth = validated_data["date_of_birth"]
         )
         return user
+    
+
+class UserAuthSerializer(serializers.ModelSerializer):
+    roles = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ["roles"]
+
+    def get_roles(self, obj):
+        return [group.name for group in obj.groups.all()]
 
 
 class AuthViewSet(viewsets.ViewSet):
@@ -63,3 +74,16 @@ class AuthViewSet(viewsets.ViewSet):
         
         else:
             return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    @action(detail=False, methods=["post"], url_path="me")
+    def authenticate_user(self, request):
+        token_key = request.data.get("token")
+
+        try:
+            token = Token.objects.get(key=token_key)
+            user = User.objects.get(id=token.user_id)
+            serializer = UserAuthSerializer(user, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Token.DoesNotExist:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
