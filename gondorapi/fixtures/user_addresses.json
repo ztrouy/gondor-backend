@@ -3,243 +3,243 @@
         "model": "gondorapi.useraddress",
         "pk": "960cf441090d46b9a5d978da7328472d",
         "fields": {
-            "user_id": "3bc6e226eb4443cd9e446dbd0f7b5efd",
-            "address_id": "23a3efc91e0a4bc48a8b1b99c0d1d9be",
-            "address_type_id": 1
+            "user": "3bc6e226eb4443cd9e446dbd0f7b5efd",
+            "address": "23a3efc91e0a4bc48a8b1b99c0d1d9be",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "34ad41fb0316424180cf2797112b752a",
         "fields": {
-            "user_id": "3bc6e226eb4443cd9e446dbd0f7b5efd",
-            "address_id": "454d28945a5d43c49d99e4e7bfef2f98",
-            "address_type_id": 2
+            "user": "3bc6e226eb4443cd9e446dbd0f7b5efd",
+            "address": "454d28945a5d43c49d99e4e7bfef2f98",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "bbf1fcc82d4b4b9aa99529126f3756a5",
         "fields": {
-            "user_id": "3bc6e226eb4443cd9e446dbd0f7b5efd",
-            "address_id": "ad99819e512742ffa1fee04dcbfc3af1",
-            "address_type_id": 3
+            "user": "3bc6e226eb4443cd9e446dbd0f7b5efd",
+            "address": "ad99819e512742ffa1fee04dcbfc3af1",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "c29f034066024f48924efd33e8d1ddfc",
         "fields": {
-            "user_id": "d3ef4f3485f54c5e897e4d11ec7a2186",
-            "address_id": "fb6e6f970f764b4e94cbe2b68bcfb02d",
-            "address_type_id": 1
+            "user": "d3ef4f3485f54c5e897e4d11ec7a2186",
+            "address": "fb6e6f970f764b4e94cbe2b68bcfb02d",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "905f5afea7284ed79ff4a74e7220f924",
         "fields": {
-            "user_id": "d3ef4f3485f54c5e897e4d11ec7a2186",
-            "address_id": "9b2d5d4109374d6ebb8e636bf83ab13f",
-            "address_type_id": 2
+            "user": "d3ef4f3485f54c5e897e4d11ec7a2186",
+            "address": "9b2d5d4109374d6ebb8e636bf83ab13f",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "9f44f9e5e2cf4b568520d9436cef3a9d",
         "fields": {
-            "user_id": "d3ef4f3485f54c5e897e4d11ec7a2186",
-            "address_id": "493d24bbe62d46f18a2b88f5a4cf2059",
-            "address_type_id": 3
+            "user": "d3ef4f3485f54c5e897e4d11ec7a2186",
+            "address": "493d24bbe62d46f18a2b88f5a4cf2059",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "9a778c9611a148ceb6badee3e47fe1c6",
         "fields": {
-            "user_id": "68538e005a104012adf24f56f8b909e4",
-            "address_id": "b48b11b1f030472f97af92978a1422f4",
-            "address_type_id": 1
+            "user": "68538e005a104012adf24f56f8b909e4",
+            "address": "b48b11b1f030472f97af92978a1422f4",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "61c142176eb04690b48bde45eba998b8",
         "fields": {
-            "user_id": "68538e005a104012adf24f56f8b909e4",
-            "address_id": "60d7ec5851974a97a0dacc4b5c5db408",
-            "address_type_id": 2
+            "user": "68538e005a104012adf24f56f8b909e4",
+            "address": "60d7ec5851974a97a0dacc4b5c5db408",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "7ab219290b0649fea5d3a44895866ac2",
         "fields": {
-            "user_id": "68538e005a104012adf24f56f8b909e4",
-            "address_id": "913236cd7e68438d826f660a15c66085",
-            "address_type_id": 3
+            "user": "68538e005a104012adf24f56f8b909e4",
+            "address": "913236cd7e68438d826f660a15c66085",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "541063de3d76427cb0bb7e4a848d70b3",
         "fields": {
-            "user_id": "69a896e32a364a268bd1eac7e83c80ad",
-            "address_id": "a53e8e3454fe439d88afcad97a801e34",
-            "address_type_id": 1
+            "user": "69a896e32a364a268bd1eac7e83c80ad",
+            "address": "a53e8e3454fe439d88afcad97a801e34",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "b23d581603ee402a912612937f2d0016",
         "fields": {
-            "user_id": "69a896e32a364a268bd1eac7e83c80ad",
-            "address_id": "cc0d77c85b164e539d9d290e2f2c1fc7",
-            "address_type_id": 2
+            "user": "69a896e32a364a268bd1eac7e83c80ad",
+            "address": "cc0d77c85b164e539d9d290e2f2c1fc7",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "3a7c833a721c4c968415829ea0b59eb9",
         "fields": {
-            "user_id": "69a896e32a364a268bd1eac7e83c80ad",
-            "address_id": "7a003fe6fd74482f963bd56f24d8a23b",
-            "address_type_id": 3
+            "user": "69a896e32a364a268bd1eac7e83c80ad",
+            "address": "7a003fe6fd74482f963bd56f24d8a23b",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "d0092e6f1d17493093959eca4e0ac295",
         "fields": {
-            "user_id": "fe15a1cdcb1244239e2788356a383044",
-            "address_id": "89b92a6e9cf7464ba8b7928057601a2b",
-            "address_type_id": 1
+            "user": "fe15a1cdcb1244239e2788356a383044",
+            "address": "89b92a6e9cf7464ba8b7928057601a2b",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "3ad552179be343c2bcf99f54bfab4e93",
         "fields": {
-            "user_id": "fe15a1cdcb1244239e2788356a383044",
-            "address_id": "e93b97ed5f0745f1b71213f4a6047bb3",
-            "address_type_id": 2
+            "user": "fe15a1cdcb1244239e2788356a383044",
+            "address": "e93b97ed5f0745f1b71213f4a6047bb3",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "85dd37c7ad39490795e33a65f51ed4c9",
         "fields": {
-            "user_id": "fe15a1cdcb1244239e2788356a383044",
-            "address_id": "d093fb77d3784c36a90c1b0c12451fa5",
-            "address_type_id": 3
+            "user": "fe15a1cdcb1244239e2788356a383044",
+            "address": "d093fb77d3784c36a90c1b0c12451fa5",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "9b38fa8579564e20bad98c97f1c3562c",
         "fields": {
-            "user_id": "985e67e2b46a4ed2b3004274c1149b4a",
-            "address_id": "23a3efc91e0a4bc48a8b1b99c0d1d9be",
-            "address_type_id": 1
+            "user": "985e67e2b46a4ed2b3004274c1149b4a",
+            "address": "7b39404c-59b0-4558-95e1-3fcb9bc13105",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "ccee624e1aaa47c8ad2b91ef500ef0a0",
         "fields": {
-            "user_id": "985e67e2b46a4ed2b3004274c1149b4a",
-            "address_id": "454d28945a5d43c49d99e4e7bfef2f98",
-            "address_type_id": 2
+            "user": "985e67e2b46a4ed2b3004274c1149b4a",
+            "address": "7beeb94e-bc03-4ee3-ab78-42b3754e34cd",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "12e1749e6b6f49c582b26fa7d6f78ec6",
         "fields": {
-            "user_id": "985e67e2b46a4ed2b3004274c1149b4a",
-            "address_id": "ad99819e512742ffa1fee04dcbfc3af1",
-            "address_type_id": 3
+            "user": "985e67e2b46a4ed2b3004274c1149b4a",
+            "address": "eb615a0f-7605-402a-90dc-6e41f1e87022",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "b6990fe2289e49199c86a3a2a49791e3",
         "fields": {
-            "user_id": "69dde221df2d47f988e3a08672264d5d",
-            "address_id": "fb6e6f970f764b4e94cbe2b68bcfb02d",
-            "address_type_id": 1
+            "user": "69dde221df2d47f988e3a08672264d5d",
+            "address": "a872d36d-209b-45e8-a0eb-cfc26ea8b1a1",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "f050d3f9ce0443a4b17f09f0d1c6b3b8",
         "fields": {
-            "user_id": "69dde221df2d47f988e3a08672264d5d",
-            "address_id": "9b2d5d4109374d6ebb8e636bf83ab13f",
-            "address_type_id": 2
+            "user": "69dde221df2d47f988e3a08672264d5d",
+            "address": "c1887c97-6f61-4733-a9be-d7307e68f6c4",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "12e0e5b3a007432fb348a263e5679cfa",
         "fields": {
-            "user_id": "69dde221df2d47f988e3a08672264d5d",
-            "address_id": "493d24bbe62d46f18a2b88f5a4cf2059",
-            "address_type_id": 3
+            "user": "69dde221df2d47f988e3a08672264d5d",
+            "address": "fc89b70b-80b4-4b10-9b31-8ebc13046efe",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "56195feae49043b1b7e6934ef0a64cbf",
         "fields": {
-            "user_id": "7a3cf9d96c7b430fa1a0a18497cb9940",
-            "address_id": "b48b11b1f030472f97af92978a1422f4",
-            "address_type_id": 1
+            "user": "7a3cf9d96c7b430fa1a0a18497cb9940",
+            "address": "8445f4d0-59d1-48e0-9985-613ff88d53a6",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "604da29fa296469bbd83cf76ceaac2c6",
         "fields": {
-            "user_id": "7a3cf9d96c7b430fa1a0a18497cb9940",
-            "address_id": "60d7ec5851974a97a0dacc4b5c5db408",
-            "address_type_id": 2
+            "user": "7a3cf9d96c7b430fa1a0a18497cb9940",
+            "address": "866302ef-d8b2-433e-bd82-4944c10bf1e2",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "c86e101984704514a4db2edb827ee61a",
         "fields": {
-            "user_id": "7a3cf9d96c7b430fa1a0a18497cb9940",
-            "address_id": "913236cd7e68438d826f660a15c66085",
-            "address_type_id": 3
+            "user": "7a3cf9d96c7b430fa1a0a18497cb9940",
+            "address": "eb013049-de73-4df9-a05c-5eba76edb878",
+            "address_type": 3
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "e01b10ae017b49a8a1af89d8e203e19c",
         "fields": {
-            "user_id": "5a7598b0537b4702b0f11e5eb343722c",
-            "address_id": "a53e8e3454fe439d88afcad97a801e34",
-            "address_type_id": 1
+            "user": "5a7598b0537b4702b0f11e5eb343722c",
+            "address": "5b7d9bfe-c0e7-48de-915a-e70d87d6eac6",
+            "address_type": 1
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "dadb03b5fc6545f98015ab69f4ffd42a",
         "fields": {
-            "user_id": "5a7598b0537b4702b0f11e5eb343722c",
-            "address_id": "cc0d77c85b164e539d9d290e2f2c1fc7",
-            "address_type_id": 2
+            "user": "5a7598b0537b4702b0f11e5eb343722c",
+            "address": "dd5f2eec-312b-4fc5-a8ff-1c12c62da482",
+            "address_type": 2
         }
     },
     {
         "model": "gondorapi.useraddress",
         "pk": "6d8a784e181a44c385009610b3b4228e",
         "fields": {
-            "user_id": "5a7598b0537b4702b0f11e5eb343722c",
-            "address_id": "7a003fe6fd74482f963bd56f24d8a23b",
-            "address_type_id": 3
+            "user": "5a7598b0537b4702b0f11e5eb343722c",
+            "address": "1cf6c994-a1c6-4362-84cf-55c5ac632ece",
+            "address_type": 3
         }
     }
 ]
