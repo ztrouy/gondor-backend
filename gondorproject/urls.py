@@ -11,6 +11,7 @@ router.register(r"states", StateViewSet, "state")
 urlpatterns = [
     path('', include(router.urls)),
     path("register", AuthViewSet.as_view({"post": "register_patient"}), name="register"),
-    path("login", AuthViewSet.as_view({"post": "login"}), name="login")
+    path("login", AuthViewSet.as_view({"post": "login"}), name="login"),
+    path("me", AuthViewSet.as_view({"post": "authenticate_user"}), name="me"),
 ]
 
