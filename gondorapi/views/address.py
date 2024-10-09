@@ -35,8 +35,8 @@ class AddressViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     
 
-    @action(detail= True, methods=["delete"], url_path="deleteAddress")
-    def delete_user_address(self,request, pk=None):
+  
+    def destroy(self,request, pk=None):
         user = request.user
         
         try:
@@ -46,7 +46,7 @@ class AddressViewSet(viewsets.ViewSet):
                 return Response({"message": "Address deleted"}, status=status.HTTP_204_NO_CONTENT)
 
             return Response({"error": "You are not authorized to delete this address."},status=status.HTTP_401_UNAUTHORIZED)    
-            
+
         except Address.DoesNotExist:
             return Response({"error":"Address not found!"}, status=status.HTTP_404_NOT_FOUND)
         
