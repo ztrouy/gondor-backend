@@ -1,11 +1,12 @@
 from gondorapi.models import Address, State
 from rest_framework.response import Response
 from rest_framework.decorators import action 
-from rest_framework import viewsets, serializers
+from rest_framework import viewsets, serializers, status
+import uuid
 
 class AddressSerializer(serializers.ModelSerializer):
     state_name = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Address
         fields = ["id","line1","line2","city","state_code", "state_name","postal_code"]
@@ -32,3 +33,21 @@ class AddressViewSet(viewsets.ViewSet):
         addresses = Address.objects.filter(user= user)
         serializer = AddressSerializer(addresses, many=True)
         return Response(serializer.data)
+    
+
+    @action(detail= True, methods=["delete"], url_path="deleteAddress")
+    def delete_user_address(self,request, pk=None):
+        user = request.user
+        
+        try:
+            address = Address.objects.get(pk=pk)
+            if address.user == request.user:
+                address.delete()
+                return Response({"message": "Address deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+            return Response({"error": "You are not authorized to delete this address."},status=status.HTTP_401_UNAUTHORIZED)    
+            
+        except Address.DoesNotExist:
+            return Response({"error":"Address not found!"}, status=status.HTTP_404_NOT_FOUND)
+        
+
