@@ -5,6 +5,7 @@ from rest_framework import viewsets, serializers
 
 class AddressSerializer(serializers.ModelSerializer):
     state_name = serializers.SerializerMethodField()
+    
     class Meta:
         model = Address
         fields = ["id","line1","line2","city","state_code", "state_name","postal_code"]
@@ -25,7 +26,7 @@ class AddressSerializer(serializers.ModelSerializer):
         
     
 class AddressViewSet(viewsets.ViewSet):
-    @action(detail=False,methods=["get"], url_path="my")
+    @action(detail=False, methods=["get"], url_path="my")
     def get_user_addresses(self,request):
         user = request.user
         addresses = Address.objects.filter(user= user)
