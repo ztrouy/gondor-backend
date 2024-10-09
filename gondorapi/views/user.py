@@ -18,11 +18,13 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         data["new_password"] = data.pop("newPassword")
         return super().to_internal_value(data)
     
-    def update(self, instance, validated_data):
-        validation_errors = check_password(validated_data["old_password"], instance.password)
+    def validate(self, attrs):
+        validation_errors = check_password(self.validated_data["old_password"], self.instance.password)
         if not validation_errors:
             raise serializers.ValidationError("Old password does not match current password.")
+        return super().validate(attrs)
 
+    def update(self, instance, validated_data):
         instance.set_password(validated_data["new_password"])
         instance.save()
         return instance
