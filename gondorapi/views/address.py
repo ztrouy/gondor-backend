@@ -36,8 +36,6 @@ class AddressViewSet(viewsets.ViewSet):
 
   
     def destroy(self,request, pk=None):
-        user = request.user
-        
         try:
             address = Address.objects.get(pk=pk)
             if address.user == request.user:
