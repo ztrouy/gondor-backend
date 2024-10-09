@@ -2,7 +2,6 @@ from gondorapi.models import Address, State
 from rest_framework.response import Response
 from rest_framework.decorators import action 
 from rest_framework import viewsets, serializers, status
-import uuid
 
 class AddressSerializer(serializers.ModelSerializer):
     state_name = serializers.SerializerMethodField()
