@@ -30,7 +30,10 @@ class PatientAppointmentSerializer(serializers.ModelSerializer):
 class AppointmentViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="my")
     def get_patient_appointments(self, request):
-        appointments = Appointment.objects.filter(patient=request.user)
-        print(appointments)
+        todays_date = datetime.date.today() 
+        after_date = request.GET.get("afterDate") if request.GET.get("afterDate") != None else "0001-01-01"
+        before_date = request.GET.get("beforeDate") if request.GET.get("beforeDate") != None else datetime.date(todays_date.year + 1, todays_date.month, todays_date.day).strftime("%Y-%m-%d")
+        clinician_filter = request.GET.get("clinicianName") if request.GET.get("clinicianName") != None else ""
+        appointments = Appointment.objects.filter(patient=request.user, scheduled_timestamp__range=[after_date, before_date], clinician__last_name__icontains=clinician_filter)
         serializer = PatientAppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
