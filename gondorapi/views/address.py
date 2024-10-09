@@ -8,7 +8,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        fields = ["id","line1","line2","city","state_code", "state_name","postal_code"]
+        fields = ["id", "line1", "line2", "city", "state_code", "state_name", "postal_code"]
     
     def get_state_name(self,obj):
         try:
@@ -35,14 +35,14 @@ class AddressViewSet(viewsets.ViewSet):
     
 
   
-    def destroy(self,request, pk=None):
+    def destroy(self, request, pk=None):
         try:
             address = Address.objects.get(pk=pk)
             if address.user == request.user:
                 address.delete()
                 return Response({"message": "Address deleted"}, status=status.HTTP_204_NO_CONTENT)
 
-            return Response({"error": "You are not authorized to delete this address."},status=status.HTTP_401_UNAUTHORIZED)    
+            return Response({"error": "You are not authorized to delete this address."}, status=status.HTTP_401_UNAUTHORIZED)    
 
         except Address.DoesNotExist:
             return Response({"error":"Address not found!"}, status=status.HTTP_404_NOT_FOUND)
