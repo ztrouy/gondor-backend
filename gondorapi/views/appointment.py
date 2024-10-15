@@ -6,25 +6,25 @@ from rest_framework.response import Response
 
 class PatientAppointmentSerializer(serializers.ModelSerializer):
     clinicianName = serializers.SerializerMethodField()
-    approvalStatus = serializers.SerializerMethodField()
-    completedStatus = serializers.SerializerMethodField()
+    isApproved = serializers.SerializerMethodField()
+    isCompleted = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
-        fields = ["scheduled_timestamp", "clinicianName", "approvalStatus", "completedStatus"]
+        fields = ["id", "scheduled_timestamp", "clinician", "isPending", "isApproved", "isCompleted"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep["scheduledTimestamp"] = rep.pop("scheduled_timestamp")
         return rep
 
-    def get_clinicianName(self, obj):
-        return f"{obj.clinician.first_name} {obj.clinician.last_name}"
+    # def get_clinicianName(self, obj):
+    #     return f"{obj.clinician.first_name} {obj.clinician.last_name}"
     
-    def get_approvalStatus(self, obj):
+    def get_isApproved(self, obj):
         return None if obj.approver == None and not obj.is_approved else obj.is_approved
 
-    def get_completedStatus(self, obj):
+    def get_isCompleted(self, obj):
         return obj.is_approved and obj.is_checked_in and (datetime.datetime.now() - obj.scheduledTimestamp).minutes > 30
 
 class AppointmentViewSet(viewsets.ViewSet):
