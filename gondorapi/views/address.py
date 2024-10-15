@@ -47,4 +47,3 @@ class AddressViewSet(viewsets.ViewSet):
         except Address.DoesNotExist:
             return Response({"error":"Address not found!"}, status=status.HTTP_404_NOT_FOUND)
         
-
