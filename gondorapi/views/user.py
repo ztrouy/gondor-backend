@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from gondorapi.models import User, PatientClinician
+from gondorapi.models import User, PatientClinician, Address
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from django.db.models import Q
@@ -68,6 +68,43 @@ class UserSerializer(serializers.ModelSerializer):
     def get_fullName(self, obj):
         return f"{obj.first_name} {obj.last_name}"
     
+class UserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ["line1", "line2", "city", "state_code", "postal_code"]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["stateCode"] = rep.pop("state_code")
+        rep["postalCode"] = rep.pop("postal_code")
+        return rep
+
+class UserWithAddressSerializer(serializers.ModelSerializer):
+    fullName = serializers.SerializerMethodField()
+    primaryAddress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "fullName", "date_of_birth", "email", "primaryAddress"]
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["firstName"] = rep.pop("first_name")
+        rep["lastName"] = rep.pop("last_name")
+        rep["dateOfBirth"] = rep.pop("date_of_birth")
+        return rep
+
+    def get_fullName(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+    
+    def get_primaryAddress(self, obj):
+        address = obj.primary_address
+        if address:
+            serialized_address = UserAddressSerializer(address).data
+            return serialized_address
+        
+        return None
+
 class ClinicianSerializer(serializers.ModelSerializer):
     fullName = serializers.SerializerMethodField()
 
@@ -104,7 +141,7 @@ class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
     def get_my_details(self, request):
-        serializer = UserSerializer(request.user)
+        serializer = UserWithAddressSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=["put"], url_path="edit-account")

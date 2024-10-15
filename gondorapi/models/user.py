@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from .address_type import AddressType
 import uuid
 
 class User(AbstractUser):
@@ -17,6 +18,20 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
+
+    @property
+    def primary_address(self):
+        try:
+            primary_address_type = AddressType.objects.get(name="Primary Address")
+            user_address = self.active_addresses.get(address_type=primary_address_type)
+
+            if user_address:
+                return user_address.address
+            
+            return None
+        
+        except:
+            return None
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
