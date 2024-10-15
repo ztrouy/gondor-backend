@@ -84,10 +84,10 @@ class ClinicianSerializer(serializers.ModelSerializer):
     def get_fullName(self, obj):
         return f"{obj.first_name} {obj.last_name}"
 
-
 class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
     isProvider = serializers.SerializerMethodField()
     fullName = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ["first_name", "last_name", "fullName", "id", "isProvider"]
@@ -99,6 +99,7 @@ class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
         patient = self.context.get('patient')
 
         return PatientClinician.objects.filter(patient=patient, clinician=obj).exists()
+    
 
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
@@ -127,8 +128,10 @@ class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="clinicians")
     def get_all_clinicians(self,request):
         user = request.user
+
         clinician_group = Group.objects.get(name="Clinician")
         clinicians = User.objects.filter(groups=clinician_group)
+         
         is_active_search = self.request.query_params.get('active', None)
         if is_active_search != None:
            clinicians =  clinicians.filter(
@@ -138,10 +141,12 @@ class UserViewSet(viewsets.ViewSet):
         if user.groups.filter(name__in=["Clinician", "Receptionist"]).exists():
             serializer = ClinicianSerializer(clinicians, many=True)
             return Response(serializer.data)
+        
         elif user.groups.filter(name="Patient").exists():
             assigned_clinicians = PatientClinician.objects.filter(patient=user).values_list('clinician_id', flat= True)
             serializer = ClinicianWithIsProviderSerializer(clinicians, many= True, context={'patient': user, 'assigned_clinicians':assigned_clinicians})
             return Response(serializer.data)
+        
         return Response(status=status.HTTP_403_FORBIDDEN)
           
 
