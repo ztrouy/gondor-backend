@@ -29,6 +29,7 @@ class User(AbstractUser):
                 return user_address.address
             
             return None
+        
         except:
             return None
 
