@@ -21,13 +21,16 @@ class User(AbstractUser):
 
     @property
     def primary_address(self):
-        primary_address_type = AddressType.objects.get(name="Primary Address")
-        user_address = self.active_addresses.get(address_type=primary_address_type)
+        try:
+            primary_address_type = AddressType.objects.get(name="Primary Address")
+            user_address = self.active_addresses.get(address_type=primary_address_type)
 
-        if user_address:
-            return user_address.address
-        
-        return None
+            if user_address:
+                return user_address.address
+            
+            return None
+        except:
+            return None
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
