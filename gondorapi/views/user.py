@@ -1,8 +1,9 @@
 from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from gondorapi.models import User
+from gondorapi.models import User, PatientClinician
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import Group
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField()
@@ -65,6 +66,22 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_fullName(self, obj):
         return f"{obj.first_name} {obj.last_name}"
+    
+class ClinicianSerializer(serializers.ModelSerializer):
+    fullName = serializers.SerializerMethodField()
+
+    class Meta:
+        model= User
+        fields = ["first_name", "last_name", "fullName", "id"]
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["firstName"] = rep.pop("first_name")
+        rep["lastName"] = rep.pop("last_name")
+        return rep
+
+    def get_fullName(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -90,3 +107,12 @@ class UserViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=["get"], url_path="clinicians")
+    def get_all_clinicians(self,request):
+        clinician_group = Group.objects.get(name="Clinician")
+
+        clinicians = User.objects.filter(groups=clinician_group)
+        serializer = ClinicianSerializer(clinicians, many=True)
+        return Response(serializer.data)
+
