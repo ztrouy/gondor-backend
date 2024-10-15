@@ -60,9 +60,9 @@ class AppointmentViewSet(viewsets.ViewSet):
                 is_pending = None
 
         if after_date != None:
-            q &= Q(scheduled_timestamp__lt=after_date)
+            q &= Q(scheduled_timestamp__gt=after_date)
         if before_date != None:
-            q &= Q(scheduled_timestamp__gt=before_date)
+            q &= Q(scheduled_timestamp__lt=before_date)
         if clinician_id != None:
             q &= Q(clinician__id=clinician_id)
         if is_pending == True:
