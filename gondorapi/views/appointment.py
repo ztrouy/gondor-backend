@@ -22,6 +22,7 @@ class PatientAppointmentClinicianSerializer(serializers.ModelSerializer):
 
 class PatientAppointmentSerializer(serializers.ModelSerializer):
     clinician = PatientAppointmentClinicianSerializer(read_only = True)
+    isPending = serializers.SerializerMethodField()
     isCompleted = serializers.SerializerMethodField()
 
     class Meta:
@@ -34,11 +35,11 @@ class PatientAppointmentSerializer(serializers.ModelSerializer):
         rep["isApproved"] = rep.pop("is_approved")
         return rep
 
-    # def get_clinicianName(self, obj):
-    #     return f"{obj.clinician.first_name} {obj.clinician.last_name}"
+    def get_isPending(self, obj):
+        return obj.approver == None and obj.is_approved == False
 
-    # def get_isCompleted(self, obj):
-    #     return obj.is_approved and obj.is_checked_in and (datetime.datetime.now() - obj.scheduledTimestamp).minutes > 30
+    def get_isCompleted(self, obj):
+        return obj.is_checked_in and (datetime.datetime.now() - obj.scheduledTimestamp).minutes > 30
 
 
 
