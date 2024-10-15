@@ -3,6 +3,7 @@ from gondorapi.models import Appointment, User
 import datetime
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.db.models import Q
 
 class PatientAppointmentClinicianSerializer(serializers.ModelSerializer):
     fullName = serializers.SerializerMethodField()
@@ -18,7 +19,7 @@ class PatientAppointmentClinicianSerializer(serializers.ModelSerializer):
         return rep
 
     def get_fullName(self, obj):
-        return f"{obj.clinician.first_name} {obj.clinician.last_name}"
+        return f"{obj.first_name} {obj.last_name}"
 
 class PatientAppointmentSerializer(serializers.ModelSerializer):
     clinician = PatientAppointmentClinicianSerializer(read_only = True)
@@ -39,19 +40,36 @@ class PatientAppointmentSerializer(serializers.ModelSerializer):
         return obj.approver == None and obj.is_approved == False
 
     def get_isCompleted(self, obj):
-        return obj.is_checked_in and (datetime.datetime.now() - obj.scheduledTimestamp).minutes > 30
-
-
+        return obj.is_checked_in and (datetime.datetime.now(obj.scheduled_timestamp.tzinfo).minute - obj.scheduled_timestamp.minute) > 30
 
 class AppointmentViewSet(viewsets.ViewSet):
-    @action(detail=False, methods=["get"], url_path="my")
+    @action(detail=False, methods=["get"], url_path="me")
     def get_patient_appointments(self, request):
-        # todays_date = datetime.date.today() 
-        # after_date = request.GET.get("after") if request.GET.get("after") != None else "0001-01-01"
-        # before_date = request.GET.get("before") if request.GET.get("before") != None else datetime.date(todays_date.year + 1, todays_date.month, todays_date.day).strftime("%Y-%m-%d")
-        # clinician_filter = request.GET.get("clinicianId") if request.GET.get("clinicianName") != None else ""
-        # appointments = Appointment.objects.filter(patient=request.user, scheduled_timestamp__range=[after_date, before_date], clinician__last_name__icontains=clinician_filter)
-        # serializer = PatientAppointmentSerializer(appointments, many=True)
-        #return Response(serializer.data, status=status.HTTP_200_OK)
+        q=Q(patient=request.user)
 
-        return
+        before_date = request.GET.get("before")
+        after_date = request.GET.get("after")
+        clinician_id = request.GET.get("clinician")
+        is_pending = None
+        match(request.GET.get("pending")):
+            case "true" | "True":
+                is_pending = True
+            case "false" | "False":
+                is_pending = False
+            case _:
+                is_pending = None
+
+        if after_date != None:
+            q &= Q(scheduled_timestamp__lt=after_date)
+        if before_date != None:
+            q &= Q(scheduled_timestamp__gt=before_date)
+        if clinician_id != None:
+            q &= Q(clinician__id=clinician_id)
+        if is_pending == True:
+            q &= Q(approver__isnull=is_pending) & Q(is_approved=False)
+        elif is_pending == False:
+            q &= Q(approver__isnull=False) | Q(is_approved=True)
+
+        appointments = Appointment.objects.filter(q)
+        serializer = PatientAppointmentSerializer(appointments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
