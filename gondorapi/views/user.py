@@ -215,7 +215,6 @@ class UserViewSet(viewsets.ViewSet):
         
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-
     @action(detail=True, methods=["get"], url_path="patient")
     def get_patient_details(self,request,pk=None):
         user = request.user
@@ -235,7 +234,6 @@ class UserViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         
         return Response({"detail": "You do not have permission to access this data."}, status=status.HTTP_403_FORBIDDEN)
-
           
     @action(detail=True, methods=["get"], url_path="records/last")
     def get_recent_record(self, request, pk = None):
