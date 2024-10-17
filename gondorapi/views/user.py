@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from gondorapi.models import User, PatientClinician, Address
+from gondorapi.models import User, PatientClinician, Address, PatientData
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from django.db.models import Q
@@ -136,7 +136,19 @@ class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
         patient = self.context.get('patient')
 
         return PatientClinician.objects.filter(patient=patient, clinician=obj).exists()
+
+class PatientDataVitalsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientData
+        fields = ["patient_systolic", "patient_diastolic", "patient_weight_kg"]
     
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["patientSystolic"] = rep.pop("patient_systolic")
+        rep["patientDiastolic"] = rep.pop("patient_diastolic")
+        rep["patientWeightKg"] = rep.pop("patient_weight_kg")
+        return rep
+
 
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
@@ -186,4 +198,27 @@ class UserViewSet(viewsets.ViewSet):
         
         return Response(status=status.HTTP_403_FORBIDDEN)
           
+    @action(detail=True, methods=["get"], url_path="records/last")
+    def get_recent_record(self, request, pk = None):
+        requester = request.user
+        is_clinician = requester.groups.filter(name="Clinician").exists()
+        if not is_clinician:
+            return Response("You are not a Clinician", status=status.HTTP_403_FORBIDDEN)
 
+        patient = User.objects.get(pk=pk)
+        is_patient = patient.groups.filter(name="Patient").exists()
+        if not is_patient:
+            return Response("Requested User is not a Patient", status=status.HTTP_400_BAD_REQUEST)
+
+        is_provider = PatientClinician.objects.filter(patient=patient, clinician=requester).exists()
+        if not is_provider:
+            return Response("You are not a provider for this Patient", status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            recent_record = patient.personal_patient_data.latest("created_timestamp")
+        
+        except PatientData.DoesNotExist:
+            return Response("No Medical Records exist", status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = PatientDataVitalsSerializer(recent_record)
+        return Response(serializer.data)
