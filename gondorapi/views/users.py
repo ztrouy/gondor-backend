@@ -262,7 +262,7 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=["get"], url_path="appointments")
-    def get_appointments(self, request, pk=None):
+    def get_patients_appointments(self, request, pk=None):
         requester = request.user
 
         is_allowed = requester.groups.filter(name__in=["Clinician", "Receptionist"]).exists()
