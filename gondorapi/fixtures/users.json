@@ -152,7 +152,7 @@
             "date_of_birth": "1993-07-29",
             "is_superuser": false,
             "is_staff": false,
-            "is_active": true,
+            "is_active": false,
             "created_timestamp": "2024-10-02T17:51:01.377886Z",
             "updated_timestamp": "2024-10-02T17:51:01.377886Z",
             "groups": [1],
