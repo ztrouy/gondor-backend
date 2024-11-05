@@ -8,6 +8,7 @@ from django.db.models import Q, Value, CharField, Min
 from django.db.models.functions import Concat
 from django.utils import timezone
 
+
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField()
     new_password = serializers.CharField()
@@ -138,19 +139,21 @@ class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
         patient = self.context.get('patient')
 
         return PatientClinician.objects.filter(patient=patient, clinician=obj).exists()
-
-class PatientSerializer(serializers.ModelSerializer):
+    
+class PatientLatestAppointmentSerializer(serializers.ModelSerializer):
+    next_approved_appointment = serializers.DateTimeField()
     fullName = serializers.SerializerMethodField()
-
+    
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "fullName", "id", "is_active"]
+        fields = ["first_name", "last_name", "fullName", "date_of_birth", "id", "next_approved_appointment"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep["firstName"] = rep.pop("first_name")
         rep["lastName"] = rep.pop("last_name")
-        rep["isActive"] = rep.pop("is_active")
+        rep["dateOfBirth"] = rep.pop("date_of_birth")
+        rep["nextApprovedAppointment"] = rep.pop("next_approved_appointment")
         return rep
 
     def get_fullName(self, obj):
@@ -204,15 +207,18 @@ class PatientWithDateOfBirthAndNextAppointmentSerializer(serializers.ModelSerial
 
 class PatientDataVitalsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PatientData
-        fields = ["patient_systolic", "patient_diastolic", "patient_weight_kg"]
-    
+        model = User
+        fields = ["first_name", "last_name", "fullName", "id", "is_active"]
+
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["patientSystolic"] = rep.pop("patient_systolic")
-        rep["patientDiastolic"] = rep.pop("patient_diastolic")
-        rep["patientWeightKg"] = rep.pop("patient_weight_kg")
+        rep["firstName"] = rep.pop("first_name")
+        rep["lastName"] = rep.pop("last_name")
+        rep["isActive"] = rep.pop("is_active")
         return rep
+
+    def get_fullName(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -282,7 +288,7 @@ class UserViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         
         return Response({"detail": "You do not have permission to access this data."}, status=status.HTTP_403_FORBIDDEN)
-          
+
     @action(detail=True, methods=["get"], url_path="records/last")
     def get_recent_record(self, request, pk = None):
         requester = request.user
