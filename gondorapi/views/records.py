@@ -40,4 +40,4 @@ class RecordViewSet(viewsets.ViewSet):
             serializer = PatientDataSerializer(records, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         
-        return Response({"error": "Unauthorized access. Only patients can access their records"})
+        return Response({"error": "Unauthorized access. Only patients can access their records"}, status=status.HTTP_400_BAD_REQUEST)
