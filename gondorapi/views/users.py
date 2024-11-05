@@ -1,10 +1,12 @@
 from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from gondorapi.models import User, PatientClinician, Address, PatientData
+from gondorapi.models import User, PatientClinician, Address, PatientData, Appointment
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
-from django.db.models import Q
+from django.db.models import Q, Value, CharField, Min
+from django.db.models.functions import Concat
+from django.utils import timezone
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField()
@@ -154,6 +156,52 @@ class PatientSerializer(serializers.ModelSerializer):
     def get_fullName(self, obj):
         return f"{obj.first_name} {obj.last_name}"
 
+class PatientWithDateOfBirthSerializer(serializers.ModelSerializer):
+    fullName = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "fullName", "date_of_birth", "id"]
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["firstName"] = rep.pop("first_name")
+        rep["lastName"] = rep.pop("last_name")
+        rep["dateOfBirth"] = rep.pop("date_of_birth")
+        return rep
+
+    def get_fullName(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+class NextAppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ["scheduled_timestamp", "id"]
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["scheduledDate"] = rep.pop("scheduled_timestamp")
+        return rep
+
+class PatientWithDateOfBirthAndNextAppointmentSerializer(serializers.ModelSerializer):
+    fullName = serializers.SerializerMethodField()
+    next_appointment = NextAppointmentSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "fullName", "date_of_birth", "next_appointment", "id"]
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["firstName"] = rep.pop("first_name")
+        rep["lastName"] = rep.pop("last_name")
+        rep["dateOfBirth"] = rep.pop("date_of_birth")
+        rep["nextAppointment"] = rep.pop("next_appointment")
+        return rep
+
+    def get_fullName(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
 class PatientDataVitalsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientData
@@ -259,3 +307,39 @@ class UserViewSet(viewsets.ViewSet):
         
         serializer = PatientDataVitalsSerializer(recent_record)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=["get"], url_path="patients")
+    def get_all_active_patients(self, request):
+        user = request.user
+        
+        is_authorized = user.groups.filter(name__in=["Clinician", "Receptionist"]).exists()
+        if not is_authorized:
+            return Response("You are not authorized to see this data.", status=status.HTTP_403_FORBIDDEN)
+        
+        patient_group = Group.objects.get(name="Patient")
+        patients = User.objects.filter(groups=patient_group, is_active=True).order_by("first_name", "last_name")
+
+        search_name_text = self.request.query_params.get("name", None)
+        is_requesting_appointment = self.request.query_params.get("appointment", None) == "true"
+
+        if search_name_text:
+            patients = patients.annotate(
+                full_name = Concat("first_name", Value(" "), "last_name", output_field=CharField())
+            ).filter(
+                Q(full_name__icontains=search_name_text)
+            )
+
+        if is_requesting_appointment:
+            for patient in patients:
+                next_appointment = patient.appointments.filter(
+                    is_approved = True,
+                    scheduled_timestamp__gt=timezone.now()
+                ).order_by("scheduled_timestamp").first()
+                patient.next_appointment = next_appointment
+            
+            serializer = PatientWithDateOfBirthAndNextAppointmentSerializer(patients, many=True)
+            return Response(serializer.data)
+        
+        else:
+            serializer = PatientWithDateOfBirthSerializer(patients, many=True)
+            return Response(serializer.data)
