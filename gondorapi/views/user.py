@@ -137,23 +137,6 @@ class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
 
         return PatientClinician.objects.filter(patient=patient, clinician=obj).exists()
     
-class PatientSerializer(serializers.ModelSerializer):
-    fullName = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name", "fullName", "id", "is_active"]
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["firstName"] = rep.pop("first_name")
-        rep["lastName"] = rep.pop("last_name")
-        rep["isActive"] = rep.pop("is_active")
-        return rep
-
-    def get_fullName(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
 
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
@@ -202,27 +185,5 @@ class UserViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         
         return Response(status=status.HTTP_403_FORBIDDEN)
-
-
-    @action(detail=True, methods=["get"], url_path="patient")
-    def get_patient_details(self,request,pk=None):
-        user = request.user
-
-        if user.groups.filter(name__in=["Clinician", "Receptionist", "Administrator"]).exists():
-            patient = User.objects.get(pk=pk)
-
-            if not patient.is_active:
-                if user.groups.filter(name__in=["Administrator"]).exists():
-                    serializer = PatientSerializer(patient)
-                    return Response(serializer.data)
-                
-                elif user.groups.filter(name__in=["Clinician", "Receptionist"]).exists():
-                    return Response({"detail": "No active Patient with that Id."},status=status.HTTP_404_NOT_FOUND)
-        
-            serializer = PatientSerializer(patient)
-            return Response(serializer.data)
-        
-        return Response({"detail": "You do not have permission to access this data."}, status=status.HTTP_403_FORBIDDEN)
-
           
 
