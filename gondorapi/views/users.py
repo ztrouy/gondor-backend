@@ -234,9 +234,6 @@ class PatientDataVitalsSerializer(serializers.ModelSerializer):
         rep["patientWeightKg"] = rep.pop("patient_weight_kg")
         return rep
 
-    def get_fullName(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
 class PatientDataSerializer(serializers.ModelSerializer):
     clinician = serializers.SerializerMethodField()
 
@@ -247,6 +244,7 @@ class PatientDataSerializer(serializers.ModelSerializer):
     def get_clinician(self,obj):
         serializer = ClinicianSerializer(obj.created_by)
         return serializer.data
+
 
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
