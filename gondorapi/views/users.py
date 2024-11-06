@@ -378,7 +378,13 @@ class UserViewSet(viewsets.ViewSet):
             if not is_patient:
                 return Response("Did not specify a Patient", status=status.HTTP_400_BAD_REQUEST)
             
-            serializer = PatientAppointmentSerializer(patient.appointments, context={"request": request}, many=True)
+            appointments = patient.appointments
+            
+            is_receptionist = requester.groups.filter(name="Receptionist").exists()
+            if not is_receptionist:
+                appointments = appointments.filter(is_approved=True)
+
+            serializer = PatientAppointmentSerializer(appointments, context={"request": request}, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except User.DoesNotExist:
