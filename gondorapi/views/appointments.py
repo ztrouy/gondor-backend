@@ -76,9 +76,12 @@ class AppointmentViewSet(viewsets.ViewSet):
     
     def retrieve(self,request, pk=None):
         user = request.user
+
         is_receptionist = user.groups.filter(name="Receptionist").exists()
         is_clinician = user.groups.filter(name="Clinician").exists()
+
         found_appointment = Appointment.objects.get(pk=pk)
+
         is_authorized_user = (
             found_appointment.patient == user or
             is_clinician or
@@ -87,5 +90,6 @@ class AppointmentViewSet(viewsets.ViewSet):
 
         if not is_authorized_user:
             return Response({"error": "You are not authorized"}, status=status.HTTP_403_FORBIDDEN)
+        
         serializer = PatientAppointmentSerializer(found_appointment)
         return Response(serializer.data)
