@@ -2,12 +2,12 @@ from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from gondorapi.models import User, PatientClinician, Address, PatientData, Appointment
+from .appointments import PatientAppointmentSerializer
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
-from django.db.models import Q, Value, CharField, Min
+from django.db.models import Q, Value, CharField
 from django.db.models.functions import Concat
 from django.utils import timezone
-
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField()
@@ -139,6 +139,23 @@ class ClinicianWithIsProviderSerializer(serializers.ModelSerializer):
         patient = self.context.get('patient')
 
         return PatientClinician.objects.filter(patient=patient, clinician=obj).exists()
+
+class PatientSerializer(serializers.ModelSerializer):
+    fullName = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "fullName", "id", "is_active"]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["firstName"] = rep.pop("first_name")
+        rep["lastName"] = rep.pop("last_name")
+        rep["isActive"] = rep.pop("is_active")
+        return rep
+
+    def get_fullName(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
     
 class PatientLatestAppointmentSerializer(serializers.ModelSerializer):
     next_approved_appointment = serializers.DateTimeField()
@@ -207,14 +224,14 @@ class PatientWithDateOfBirthAndNextAppointmentSerializer(serializers.ModelSerial
 
 class PatientDataVitalsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ["first_name", "last_name", "fullName", "id", "is_active"]
-
+        model = PatientData
+        fields = ["patient_systolic", "patient_diastolic", "patient_weight_kg"]
+    
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["firstName"] = rep.pop("first_name")
-        rep["lastName"] = rep.pop("last_name")
-        rep["isActive"] = rep.pop("is_active")
+        rep["patientSystolic"] = rep.pop("patient_systolic")
+        rep["patientDiastolic"] = rep.pop("patient_diastolic")
+        rep["patientWeightKg"] = rep.pop("patient_weight_kg")
         return rep
 
     def get_fullName(self, obj):
@@ -387,3 +404,29 @@ class UserViewSet(viewsets.ViewSet):
         found_records = PatientData.objects.filter(filters)
         serializer = PatientDataSerializer(found_records, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="appointments")
+    def get_patients_appointments(self, request, pk=None):
+        requester = request.user
+
+        is_allowed = requester.groups.filter(name__in=["Clinician", "Receptionist"]).exists()
+        if not is_allowed:
+            return Response("You are not authorized to request this user data", status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            patient = User.objects.get(pk=pk)
+            is_patient = patient.groups.filter(name="Patient").exists()
+            if not is_patient:
+                return Response("Did not specify a Patient", status=status.HTTP_400_BAD_REQUEST)
+            
+            appointments = patient.appointments
+            
+            is_receptionist = requester.groups.filter(name="Receptionist").exists()
+            if not is_receptionist:
+                appointments = appointments.filter(is_approved=True)
+
+            serializer = PatientAppointmentSerializer(appointments, context={"request": request}, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response("Patient does not exist", status=status.HTTP_404_NOT_FOUND)
