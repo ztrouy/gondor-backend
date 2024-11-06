@@ -5,8 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
 from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
 
 class PatientSerializer(serializers.ModelSerializer):
+    fullName = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ["id", "first_name", "last_name", "fullName"]
@@ -57,11 +59,6 @@ class SpecificPatientDataSerializer(serializers.ModelSerializer):
         serializer = ClinicianSerializer(obj.updated_by)
         return serializer.data
 
-class CreateLogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Log
-        fields = ["viewed_by", "patient_data", "created_timestamp"]
-
 class RecordViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
     def get_my_records(self, request):
@@ -85,4 +82,24 @@ class RecordViewSet(viewsets.ViewSet):
         
         return Response({"error": "Unauthorized access. Only patients can access their records"}, status=status.HTTP_400_BAD_REQUEST)
     
+    def retrieve(self,request, pk=None):
+        user = request.user
+        found_record = get_object_or_404(PatientData, id=pk)
+        is_authorized_user = (
+            found_record.patient == user or
+            found_record.created_by == user or
+            found_record.updated_by == user
+        )
+
+        if not is_authorized_user:
+            return Response({"error": "Unauthorized access"}, status=status.HTTP_403_FORBIDDEN)
+        
+        try:
+            Log.objects.create(viewed_by=user, patient_data=found_record)
+        except Exception as e :
+            return Response({"error": f"Log creation failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        serializer = SpecificPatientDataSerializer(found_record)
+        return Response(serializer.data)
     
+
