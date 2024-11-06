@@ -39,7 +39,7 @@ class SpecificPatientDataSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["updatedClinician"] = rep.pop("updating_clinician")
+        rep["updatingClinician"] = rep.pop("updating_clinician")
         rep["createdTimestamp"] = rep.pop("created_timestamp")
         rep["patientDiastolic"] = rep.pop("patient_diastolic")
         rep["patientSystolic"] = rep.pop("patient_systolic")
