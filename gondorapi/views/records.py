@@ -84,6 +84,7 @@ class RecordViewSet(viewsets.ViewSet):
     
     def retrieve(self,request, pk=None):
         user = request.user
+        # using get_object_or_404 because when i tried patientData.objects.get it would tell me that patientData has not objects. but this works as intended.
         found_record = get_object_or_404(PatientData, id=pk)
         is_authorized_user = (
             found_record.patient == user or
