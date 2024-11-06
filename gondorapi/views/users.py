@@ -1,7 +1,12 @@
 from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
+<<<<<<< HEAD
 from gondorapi.models import User, PatientClinician, Address, PatientData, Appointment
+=======
+from gondorapi.models import User, PatientClinician, Address, PatientData
+from .appointments import PatientAppointmentSerializer
+>>>>>>> 1d68685195ff85c219b8c294d9a80194097c81c9
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from django.db.models import Q, Value, CharField, Min
@@ -313,6 +318,7 @@ class UserViewSet(viewsets.ViewSet):
         
         serializer = PatientDataVitalsSerializer(recent_record)
         return Response(serializer.data)
+<<<<<<< HEAD
     
     @action(detail=False, methods=["get"], url_path="patients")
     def get_all_active_patients(self, request):
@@ -349,3 +355,25 @@ class UserViewSet(viewsets.ViewSet):
         else:
             serializer = PatientWithDateOfBirthSerializer(patients, many=True)
             return Response(serializer.data)
+=======
+
+    @action(detail=True, methods=["get"], url_path="appointments")
+    def get_patients_appointments(self, request, pk=None):
+        requester = request.user
+
+        is_allowed = requester.groups.filter(name__in=["Clinician", "Receptionist"]).exists()
+        if not is_allowed:
+            return Response("You are not authorized to request this user data", status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            patient = User.objects.get(pk=pk)
+            is_patient = patient.groups.filter(name="Patient").exists()
+            if not is_patient:
+                return Response("Did not specify a Patient", status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer = PatientAppointmentSerializer(patient.appointments, context={"request": request}, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response("Patient does not exist", status=status.HTTP_404_NOT_FOUND)
+>>>>>>> 1d68685195ff85c219b8c294d9a80194097c81c9
