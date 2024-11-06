@@ -234,6 +234,17 @@ class PatientDataVitalsSerializer(serializers.ModelSerializer):
         rep["patientWeightKg"] = rep.pop("patient_weight_kg")
         return rep
 
+class PatientDataSerializer(serializers.ModelSerializer):
+    clinician = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PatientData
+        fields = ["id", "created_timestamp", "clinician"]
+    
+    def get_clinician(self,obj):
+        serializer = ClinicianSerializer(obj.created_by)
+        return serializer.data
+
 
 class UserViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
@@ -363,6 +374,34 @@ class UserViewSet(viewsets.ViewSet):
         else:
             serializer = PatientWithDateOfBirthSerializer(patients, many=True)
             return Response(serializer.data)
+
+    @action(detail=True, methods=["get"], url_path="records")
+    def get_records_of_specific_patient(self,request, pk=None):
+        user = request.user
+        is_authorized = user.groups.filter(name__in=["Administrator", "Clinician"]).exists()
+        if not is_authorized:
+            return Response("You are not authorized to see this data", status=status.HTTP_403_FORBIDDEN)
+
+        patient = User.objects.get(pk=pk)
+        filters = Q(patient=patient)
+        
+        clinician_id = request.GET.get("clinician")
+        before_date = request.GET.get("before")
+        after_date = request.GET.get("after")
+
+        if before_date != None:
+            filters &= Q(created_timestamp__lt = before_date)
+
+        if after_date != None:
+            filters &= Q(created_timestamp__gt=after_date)
+        
+        if clinician_id != None:
+            clinician = User.objects.get(pk=clinician_id)
+            filters &=Q(created_by = clinician)
+
+        found_records = PatientData.objects.filter(filters)
+        serializer = PatientDataSerializer(found_records, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["get"], url_path="appointments")
     def get_patients_appointments(self, request, pk=None):
