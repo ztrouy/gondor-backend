@@ -4,6 +4,7 @@ from gondorapi.serializers import AppointmentSerializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
+from django.utils import timezone
 
 
 class AppointmentViewSet(viewsets.ViewSet):
@@ -57,3 +58,44 @@ class AppointmentViewSet(viewsets.ViewSet):
         
         serializer = AppointmentSerializers.AppointmentSerializer(found_appointment)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=["get"], url_path="next")
+    def get_next_appointment(self,request):
+        user = request.user
+        now = timezone.now()
+        next_appointment = None
+        serializer = None
+
+        is_clinician = user.groups.filter(name="Clinician").exists()
+        is_patient = user.groups.filter(name="Patient").exists()
+
+        is_authorized_user = (
+            is_clinician or
+            is_patient
+        )
+        
+        if not is_authorized_user:
+            return Response({"Message": "Unauthorized user"}, status=status.HTTP_403_FORBIDDEN)
+
+        if is_clinician:
+            next_appointment=(
+                Appointment.objects.filter(clinician=user, scheduled_timestamp__gt=now, is_approved=True)
+                .order_by('scheduled_timestamp')
+                .first()
+            )
+            
+            serializer = AppointmentSerializers.AppointmentSimpleWithPatientSerializer(next_appointment)
+        
+        elif is_patient:
+            next_appointment=(
+                Appointment.objects.filter(patient=user, scheduled_timestamp__gt=now, is_approved=True)
+                .order_by('scheduled_timestamp')
+                .first()
+            )
+            
+            serializer = AppointmentSerializers.AppointmentSimpleWithClinician(next_appointment)
+             
+        if not next_appointment:
+            return Response({"Message": "No upcoming appointments found."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
