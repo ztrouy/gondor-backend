@@ -4,6 +4,7 @@ import datetime
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
+from django.utils import timezone
 
 class PatientAppointmentClinicianSerializer(serializers.ModelSerializer):
     fullName = serializers.SerializerMethodField()
@@ -93,3 +94,32 @@ class AppointmentViewSet(viewsets.ViewSet):
         
         serializer = PatientAppointmentSerializer(found_appointment)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=["get"], url_path="next")
+    def get_next_appointment(self,request):
+        user = request.user
+        now = timezone.now()
+
+        is_authorized_user = (
+            user.groups.filter(name="Clinician").exists() or
+            user.groups.filter(name="Patient").exists()
+        )
+        if not is_authorized_user:
+            return Response({"Message": "Unauthorized user"}, status=status.HTTP_403_FORBIDDEN)
+
+        if user.groups.filter(name="Clinician").exists():
+            next_appointment=(
+                Appointment.objects.filter(clinician=user,created_timestamp__gt=now)
+                .order_by('created_timestamp')
+                .first()
+            )
+        
+        elif user.groups.filter(name="Patient").exists():
+            next_appointment=(
+                Appointment.objects.filter(patient=user,created_timestamp__gt=now)
+                .order_by('created_timestamp')
+                .first()
+            )
+
+        if not next_appointment:
+            return Response({"Message": "No upcoming appointments found."}, status=status.HTTP_404_NOT_FOUND)
