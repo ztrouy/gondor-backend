@@ -1,46 +1,10 @@
-from rest_framework import viewsets, status, serializers, permissions
-from gondorapi.models import Appointment, User
-import datetime
+from rest_framework import viewsets, status
+from gondorapi.models import Appointment
+from gondorapi.serializers import AppointmentSerializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
 
-class PatientAppointmentClinicianSerializer(serializers.ModelSerializer):
-    fullName = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = ["id", "first_name", "last_name", "fullName"]
-    
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["firstName"] = rep.pop("first_name")
-        rep["lastName"] = rep.pop("last_name")
-        return rep
-
-    def get_fullName(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
-class PatientAppointmentSerializer(serializers.ModelSerializer):
-    clinician = PatientAppointmentClinicianSerializer(read_only = True)
-    isPending = serializers.SerializerMethodField()
-    isCompleted = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Appointment
-        fields = ["id", "scheduled_timestamp", "clinician", "isPending", "is_approved", "isCompleted"]
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["scheduledDate"] = rep.pop("scheduled_timestamp")
-        rep["isApproved"] = rep.pop("is_approved")
-        return rep
-
-    def get_isPending(self, obj):
-        return obj.approver == None and obj.is_approved == False
-
-    def get_isCompleted(self, obj):
-        return obj.is_checked_in and (datetime.datetime.now(obj.scheduled_timestamp.tzinfo).minute - obj.scheduled_timestamp.minute) > 30
 
 class AppointmentViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
@@ -71,7 +35,7 @@ class AppointmentViewSet(viewsets.ViewSet):
             q &= Q(approver__isnull=False) | Q(is_approved=True)
 
         appointments = Appointment.objects.filter(q)
-        serializer = PatientAppointmentSerializer(appointments, many=True)
+        serializer = AppointmentSerializers.AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def retrieve(self,request, pk=None):
@@ -91,5 +55,5 @@ class AppointmentViewSet(viewsets.ViewSet):
         if not is_authorized_user:
             return Response({"error": "You are not authorized"}, status=status.HTTP_403_FORBIDDEN)
         
-        serializer = PatientAppointmentSerializer(found_appointment)
+        serializer = AppointmentSerializers.AppointmentSerializer(found_appointment)
         return Response(serializer.data)
