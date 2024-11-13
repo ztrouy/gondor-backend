@@ -83,6 +83,7 @@ class AppointmentViewSet(viewsets.ViewSet):
                 .order_by('scheduled_timestamp')
                 .first()
             )
+            
             serializer = AppointmentSerializers.AppointmentSimpleWithPatientSerializer(next_appointment)
         
         elif is_patient:
