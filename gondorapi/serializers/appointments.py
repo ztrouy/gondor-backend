@@ -36,3 +36,29 @@ class AppointmentSerializers:
             rep = super().to_representation(instance)
             rep["scheduledTimestamp"] = rep.pop("scheduled_timestamp")
             return rep
+        
+        
+    class AppointmentSimpleWithPatientSerializer(serializers.ModelSerializer):
+        patient = EmbeddedSerializers.EmbeddedUserSimpleSerializer(read_only = True)
+
+        class Meta:
+            model= Appointment
+            fields = ["id", "scheduled_timestamp", "patient"]
+        
+        def to_representation(self, instance):
+            rep = super().to_representation(instance)
+            rep["scheduledTimestamp"] = rep.pop("scheduled_timestamp")
+            return rep
+
+
+    class AppointmentSimpleWithClinician(serializers.ModelSerializer):
+        clinician = EmbeddedSerializers.EmbeddedUserSimpleSerializer(read_only = True)
+            
+        class Meta:
+            model = Appointment
+            fields = ["id", "scheduled_timestamp", "clinician"]
+
+        def to_representation(self, instance):
+            rep = super().to_representation(instance)
+            rep["scheduledTimestamp"] = rep.pop("scheduled_timestamp")
+            return rep
