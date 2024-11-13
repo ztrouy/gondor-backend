@@ -40,6 +40,7 @@ class AppointmentSerializers:
         
     class AppointmentSimpleWithPatientSerializer(serializers.ModelSerializer):
         patient = EmbeddedSerializers.EmbeddedUserSimpleSerializer(read_only = True)
+
         class Meta:
             model= Appointment
             fields = ["id", "scheduled_timestamp", "patient"]
@@ -52,6 +53,7 @@ class AppointmentSerializers:
 
     class AppointmentSimpleWithClinician(serializers.ModelSerializer):
         clinician = EmbeddedSerializers.EmbeddedUserSimpleSerializer(read_only = True)
+            
         class Meta:
             model = Appointment
             fields = ["id", "scheduled_timestamp", "clinician"]
