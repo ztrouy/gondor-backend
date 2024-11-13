@@ -63,27 +63,38 @@ class AppointmentViewSet(viewsets.ViewSet):
     def get_next_appointment(self,request):
         user = request.user
         now = timezone.now()
+        next_appointment = None
+        serializer = None
+
+        is_clinician = user.groups.filter(name="Clinician").exists()
+        is_patient = user.groups.filter(name="Patient").exists()
 
         is_authorized_user = (
-            user.groups.filter(name="Clinician").exists() or
-            user.groups.filter(name="Patient").exists()
+            is_clinician or
+            is_patient
         )
+        
         if not is_authorized_user:
             return Response({"Message": "Unauthorized user"}, status=status.HTTP_403_FORBIDDEN)
 
-        if user.groups.filter(name="Clinician").exists():
+        if is_clinician:
             next_appointment=(
-                Appointment.objects.filter(clinician=user,created_timestamp__gt=now)
-                .order_by('created_timestamp')
+                Appointment.objects.filter(clinician=user,scheduled_timestamp__gt=now)
+                .order_by('scheduled_timestamp')
                 .first()
             )
+            serializer = AppointmentSerializers.NextClinicianAppointmentSerializer(next_appointment)
         
-        elif user.groups.filter(name="Patient").exists():
+        elif is_patient:
             next_appointment=(
-                Appointment.objects.filter(patient=user,created_timestamp__gt=now)
-                .order_by('created_timestamp')
+                Appointment.objects.filter(patient=user,scheduled_timestamp__gt=now)
+                .order_by('scheduled_timestamp')
                 .first()
             )
-
+            
+            serializer = AppointmentSerializers.NextPatientAppointmentSerializer(next_appointment)
+             
         if not next_appointment:
             return Response({"Message": "No upcoming appointments found."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
