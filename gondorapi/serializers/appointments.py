@@ -16,7 +16,7 @@ class AppointmentSerializers:
 
         def to_representation(self, instance):
             rep = super().to_representation(instance)
-            rep["scheduledDate"] = rep.pop("scheduled_timestamp")
+            rep["scheduledTimestamp"] = rep.pop("scheduled_timestamp")
             rep["isApproved"] = rep.pop("is_approved")
             return rep
 
