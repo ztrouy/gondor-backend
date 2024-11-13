@@ -53,3 +53,4 @@ class EmbeddedSerializers:
         def to_representation(self, instance):
             rep = super().to_representation(instance)
             rep["scheduledTimestamp"] = rep.pop("scheduled_timestamp")
+            return rep
