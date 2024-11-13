@@ -1,46 +1,11 @@
-from rest_framework import viewsets, status, serializers, permissions
+from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
 from gondorapi.models import User
-
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["email", "password", "first_name", "last_name", "date_of_birth"]
-        extra_kwargs = {"password": {"write_only": True}}
-    
-    def to_internal_value(self, data):
-        data = data.copy()
-        data["first_name"] = data.pop("firstName")
-        data["last_name"] = data.pop("lastName")
-        data["date_of_birth"] = data.pop("dateOfBirth")
-        return super().to_internal_value(data)
-    
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            email = validated_data["email"],
-            username = validated_data["email"],
-            password = validated_data["password"],
-            first_name = validated_data["first_name"],
-            last_name = validated_data["last_name"],
-            date_of_birth = validated_data["date_of_birth"]
-        )
-        return user
-    
-
-class UserAuthSerializer(serializers.ModelSerializer):
-    roles = serializers.SerializerMethodField()
-    
-    class Meta:
-        model = User
-        fields = ["roles"]
-
-    def get_roles(self, obj):
-        return [group.name for group in obj.groups.all()]
+from gondorapi.serializers import AuthSerializers, UserSerializers
 
 
 class AuthViewSet(viewsets.ViewSet):
@@ -48,7 +13,7 @@ class AuthViewSet(viewsets.ViewSet):
     
     @action(detail=False, methods=["post"], url_path="register")
     def register_patient(self, request):
-        serializer = UserCreateSerializer(data=request.data)
+        serializer = UserSerializers.UserCreateSerializer(data=request.data)
         if serializer.is_valid():            
             user = serializer.save()
 
@@ -82,7 +47,7 @@ class AuthViewSet(viewsets.ViewSet):
         try:
             token = Token.objects.get(key=token_key)
             user = User.objects.get(id=token.user_id)
-            serializer = UserAuthSerializer(user, context={"request": request})
+            serializer = AuthSerializers.UserAuthSerializer(user, context={"request": request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         except Token.DoesNotExist:
