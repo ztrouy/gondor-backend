@@ -20,7 +20,6 @@ class UserSerializers:
 
 
     class UserWithAddressSerializer(serializers.ModelSerializer):
-        fullName = serializers.SerializerMethodField()
         primaryAddress = serializers.SerializerMethodField()
 
         class Meta:
