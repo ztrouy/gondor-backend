@@ -79,20 +79,20 @@ class AppointmentViewSet(viewsets.ViewSet):
 
         if is_clinician:
             next_appointment=(
-                Appointment.objects.filter(clinician=user,scheduled_timestamp__gt=now)
+                Appointment.objects.filter(clinician=user, scheduled_timestamp__gt=now, is_approved=True)
                 .order_by('scheduled_timestamp')
                 .first()
             )
-            serializer = AppointmentSerializers.NextClinicianAppointmentSerializer(next_appointment)
+            serializer = AppointmentSerializers.AppointmentSimpleWithPatientSerializer(next_appointment)
         
         elif is_patient:
             next_appointment=(
-                Appointment.objects.filter(patient=user,scheduled_timestamp__gt=now)
+                Appointment.objects.filter(patient=user, scheduled_timestamp__gt=now, is_approved=True)
                 .order_by('scheduled_timestamp')
                 .first()
             )
             
-            serializer = AppointmentSerializers.NextPatientAppointmentSerializer(next_appointment)
+            serializer = AppointmentSerializers.AppointmentSimpleWithClinician(next_appointment)
              
         if not next_appointment:
             return Response({"Message": "No upcoming appointments found."}, status=status.HTTP_404_NOT_FOUND)
