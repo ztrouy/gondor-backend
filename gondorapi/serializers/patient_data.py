@@ -64,11 +64,10 @@ class PatientDataSerializers:
     class PatientDataCreateSerializer(serializers.ModelSerializer):
         class Meta:
             model = PatientData
-            fields = ["patient", "appointment" ,"created_by", "patient_systolic", "patient_diastolic", "patient_weight_kg", "clinician_notes", "is_notes_shared"]
+            fields = ["patient", "appointment", "patient_systolic", "patient_diastolic", "patient_weight_kg", "clinician_notes", "is_notes_shared"]
 
         def to_internal_value(self, data):
             data = data.copy()
-            data["created_by"] = data.pop("createdBy")
             data["patient_systolic"] = data.pop("patientSystolic")
             data["patient_diastolic"] = data.pop("patientDiastolic")
             data["patient_weight_kg"] = data.pop("patientWeightKg")
