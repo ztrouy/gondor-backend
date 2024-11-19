@@ -50,4 +50,20 @@ class RecordViewSet(viewsets.ViewSet):
         serializer = PatientDataSerializers.PatientDataSerializer(found_record)
         return Response(serializer.data)
     
+    def create(self,request):
+        user=request.user
+
+        authorized_user = user.groups.filter(name="Clinician").exists()
+
+        if not authorized_user:
+            return Response({"You are not authorized"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            patient_data = serializer.save()
+
+            return Response(status=status.HTTP_201_CREATED)
+
+
+    
 
