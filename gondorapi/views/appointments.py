@@ -121,9 +121,10 @@ class AppointmentViewSet(viewsets.ViewSet):
         if after_date != None:
             filters &= Q(scheduled_timestamp__gt=after_date)
 
-        filters &= Q(scheduled_timestamp__date=today)
+        if before_date == None and after_date == None:
+            filters &= Q(scheduled_timestamp__date=today)
 
-        found_appointments = Appointment.objects.filter(filters)
+        found_appointments = Appointment.objects.filter(filters).order_by("scheduled_timestamp")
 
         if not found_appointments:
             return Response({"No appointments found"}, status=status.HTTP_404_NOT_FOUND)
