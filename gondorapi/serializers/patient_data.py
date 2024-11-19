@@ -59,3 +59,32 @@ class PatientDataSerializers:
             rep["patientDiastolic"] = rep.pop("patient_diastolic")
             rep["patientWeightKg"] = rep.pop("patient_weight_kg")
             return rep
+        
+    
+    class PatientDataCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = PatientData
+            fields = ["patient", "appointment" ,"created_by", "patient_systolic", "patient_diastolic", "patient_weight_kg", "clinician_notes", "is_notes_shared"]
+
+        def to_internal_value(self, data):
+            data = data.copy()
+            data["created_by"] = data.pop("createdBy")
+            data["patient_systolic"] = data.pop("patientSystolic")
+            data["patient_diastolic"] = data.pop("patientDiastolic")
+            data["patient_weight_kg"] = data.pop("patientWeightKg")
+            data["clinician_notes"] = data.pop("clinicianNotes")
+            data["is_notes_shared"] = data.pop("isNotesShared")
+            return super().to_internal_value(data)
+        
+        def create(self, validated_data):
+            patient_data = PatientData.objects.create(
+                patient = validated_data["patient"],
+                appointment = validated_data["appointment"],
+                created_by = validated_data["created_by"],
+                patient_systolic = validated_data["patient_systolic"],
+                patient_diastolic = validated_data["patient_diastolic"],
+                patient_weight_kg = validated_data["patient_weight_kg"],
+                clinician_notes = validated_data["clinician_notes"],
+                is_notes_shared = validated_data["is_notes_shared"]
+            )
+            return patient_data
