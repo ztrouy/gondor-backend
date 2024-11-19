@@ -56,9 +56,9 @@ class RecordViewSet(viewsets.ViewSet):
         authorized_user = user.groups.filter(name="Clinician").exists()
 
         if not authorized_user:
-            return Response({"You are not authorized"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"You are not authorized"}, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data)
+        serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid():
             patient_data = serializer.save()
