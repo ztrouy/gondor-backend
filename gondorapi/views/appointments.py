@@ -99,3 +99,36 @@ class AppointmentViewSet(viewsets.ViewSet):
             return Response({"Message": "No upcoming appointments found."}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=["get"], url_path="assigned")
+    def get_assigned_appointment(self,request):
+        user = request.user
+        today = timezone.now().date()
+
+        authorized_user = user.groups.filter(name="Clinician").exists()
+
+        if not authorized_user:
+            return Response({"Message": "You are not authorized to have appointments assigned to you."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        filters = Q(is_approved=True, clinician=user)
+
+        before_date = request.GET.get("before")
+        after_date = request.GET.get("after")
+
+        if before_date != None:
+            filters &= Q(scheduled_timestamp__lt=before_date)
+
+        if after_date != None:
+            filters &= Q(scheduled_timestamp__gt=after_date)
+
+        if before_date == None and after_date == None:
+            filters &= Q(scheduled_timestamp__date=today)
+
+        found_appointments = Appointment.objects.filter(filters).order_by("scheduled_timestamp")
+
+        if not found_appointments:
+            return Response({"No appointments found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AppointmentSerializers.AppointmentSimpleWithPatientSerializer(found_appointments, many = True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
