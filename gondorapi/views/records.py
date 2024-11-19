@@ -59,10 +59,13 @@ class RecordViewSet(viewsets.ViewSet):
             return Response({"You are not authorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data)
+
         if serializer.is_valid():
             patient_data = serializer.save()
 
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(patient_data.id, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     
