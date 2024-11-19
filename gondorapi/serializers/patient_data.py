@@ -80,7 +80,7 @@ class PatientDataSerializers:
             patient_data = PatientData.objects.create(
                 patient = validated_data["patient"],
                 appointment = validated_data["appointment"],
-                created_by = validated_data["created_by"],
+                created_by = self.context["request"].user,
                 patient_systolic = validated_data["patient_systolic"],
                 patient_diastolic = validated_data["patient_diastolic"],
                 patient_weight_kg = validated_data["patient_weight_kg"],
