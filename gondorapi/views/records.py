@@ -1,4 +1,4 @@
-from gondorapi.models import PatientData, Log
+from gondorapi.models import PatientData, Log, Appointment
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -57,6 +57,14 @@ class RecordViewSet(viewsets.ViewSet):
 
         if not authorized_user:
             return Response({"You are not authorized"}, status=status.HTTP_403_FORBIDDEN)
+        
+        appointment_id = request.data["appointment"]
+        appointment = Appointment.objects.get(pk = appointment_id)
+        
+        existing_record = appointment.attached_patient_data
+
+        if existing_record:
+            return Response({"Message": "Record already exists for this appointment"}, status=status.HTTP_409_CONFLICT)
 
         serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data, context={"request": request})
 
