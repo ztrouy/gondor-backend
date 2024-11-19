@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from gondorapi.models import User, PatientClinician, PatientData
+from gondorapi.models import User, PatientClinician, PatientData, Log
 from gondorapi.serializers import UserSerializers, PatientSerializers, ClinicianSerializers, PatientDataSerializers, AppointmentSerializers
 from django.contrib.auth.models import Group
 from django.db.models import Q, Value, CharField
@@ -188,6 +188,39 @@ class UserViewSet(viewsets.ViewSet):
 
             serializer = AppointmentSerializers.AppointmentSerializer(appointments, context={"request": request}, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response("Patient does not exist", status=status.HTTP_404_NOT_FOUND)
+        
+    @action(detail=True, methods=["get"], url_path="records/last")
+    def get_patients_last_record(self, request, pk=None):
+        requester = request.user
+
+        is_clinician = requester.groups.filter(name="Clinician").exists()
+        if not is_clinician:
+            return Response("You are not a Clinician", status=status.HTTP_403_FORBIDDEN)
+        
+        try:
+            patient = User.objects.get(pk=pk)
+            is_patient = patient.groups.filter(name="Patient").exists()
+            if not is_patient:
+                return Response("Did not specify a Patient", status=status.HTTP_400_BAD_REQUEST)
+            
+            is_provider = PatientClinician.objects.filter(patient=patient, clinician=requester).exists()
+            if not is_provider:
+                return Response("You are not a provider for this Patient", status=status.HTTP_403_FORBIDDEN)
+            
+            last_record = PatientData.objects.filter(patient=patient).order_by("created_timestamp").last()
+            if not last_record:
+                return Response("No records exist", status=status.HTTP_404_NOT_FOUND)
+            
+            try:
+                Log.objects.create(viewed_by=requester, patient_data=last_record)
+            except Exception as e :
+                return Response({"error": f"Log creation failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            serializer = PatientDataSerializers.PatientDataVitalsSerializer(last_record)
+            return Response(serializer.data)
 
         except User.DoesNotExist:
             return Response("Patient does not exist", status=status.HTTP_404_NOT_FOUND)

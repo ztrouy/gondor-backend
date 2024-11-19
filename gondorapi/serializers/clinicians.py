@@ -1,7 +1,5 @@
-from gondorapi.models import Address, AddressType, Appointment, Log, PatientClinician, PatientData, RescheduleRequest, State, User, UserAddress
-from django.contrib.auth.hashers import check_password
+from gondorapi.models import PatientClinician, User
 from rest_framework import serializers
-import datetime
 
 
 class ClinicianSerializers:
