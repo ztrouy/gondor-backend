@@ -51,29 +51,32 @@ class RecordViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     
     def create(self,request):
-        user=request.user
+        user = request.user
 
         authorized_user = user.groups.filter(name="Clinician").exists()
-
         if not authorized_user:
             return Response({"You are not authorized"}, status=status.HTTP_403_FORBIDDEN)
         
         appointment_id = request.data["appointment"]
-        appointment = Appointment.objects.get(pk = appointment_id)
+        try:
+            appointment = Appointment.objects.get(pk = appointment_id)
+
+            existing_record = PatientData.objects.filter(appointment = appointment)
+            if existing_record:
+                return Response({"Message": "Record already exists for this appointment"}, status=status.HTTP_409_CONFLICT)
+
+            serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data, context={"request": request})
+            if serializer.is_valid():
+                patient_data = serializer.save()
+
+                return Response(patient_data.id, status=status.HTTP_201_CREATED)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        existing_record = appointment.attached_patient_data
-
-        if existing_record:
-            return Response({"Message": "Record already exists for this appointment"}, status=status.HTTP_409_CONFLICT)
-
-        serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data, context={"request": request})
-
-        if serializer.is_valid():
-            patient_data = serializer.save()
-
-            return Response(patient_data.id, status=status.HTTP_201_CREATED)
+        except Appointment.DoesNotExist:
+            return Response({"Appointment does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+       
 
 
     
