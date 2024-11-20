@@ -9,7 +9,4 @@ class UserAddress(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     address_type = models.ForeignKey(AddressType, on_delete=models.CASCADE)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=["user", "address_type"], name="unique_user_address_type")
-        ]
+
