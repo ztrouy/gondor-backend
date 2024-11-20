@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from gondorapi.models import User, PatientClinician, PatientData, Log
-from gondorapi.serializers import UserSerializers, PatientSerializers, ClinicianSerializers, PatientDataSerializers, AppointmentSerializers
+from gondorapi.serializers import UserSerializers, PatientSerializers, ClinicianSerializers, PatientDataSerializers, AppointmentSerializers, AddressSerializers
 from django.contrib.auth.models import Group
 from django.db.models import Q, Value, CharField
 from django.db.models.functions import Concat
@@ -224,3 +224,19 @@ class UserViewSet(viewsets.ViewSet):
 
         except User.DoesNotExist:
             return Response("Patient does not exist", status=status.HTTP_404_NOT_FOUND)
+        
+    
+    @action(detail=True, methods=["get"], url_path="patient/primary-address")
+    def get_patient_primary_address(self, request, pk=None):
+        requester = request.user
+        is_receptionist = requester.groups.filter(name="Receptionist").exists()
+        if not is_receptionist:
+            return Response("You are not allowed to view this data", status=status.HTTP_403_FORBIDDEN)
+        
+        patient = User.objects.get(pk=pk)
+        primary_address = patient.primary_address
+        if not primary_address:
+            return Response("There are no primary addresses for this user", status=status.HTTP_403_FORBIDDEN)
+
+        serializer = AddressSerializers.AddressSerializer(primary_address)
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
