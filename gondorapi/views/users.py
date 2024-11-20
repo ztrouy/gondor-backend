@@ -231,12 +231,12 @@ class UserViewSet(viewsets.ViewSet):
         requester = request.user
         is_receptionist = requester.groups.filter(name="Receptionist").exists()
         if not is_receptionist:
-            return Response({"You are not allowed to view this data"}, status=status.HTTP_403_FORBIDDEN)
+            return Response("You are not allowed to view this data", status=status.HTTP_403_FORBIDDEN)
         
         patient = User.objects.get(pk=pk)
         primary_address = patient.primary_address
         if not primary_address:
-            return Response({"There are no primary addresses for this user"}, status=status.HTTP_403_FORBIDDEN)
+            return Response("There are no primary addresses for this user", status=status.HTTP_403_FORBIDDEN)
 
         serializer = AddressSerializers.AddressSerializer(primary_address)
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
