@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from gondorapi.serializers import PatientDataSerializers
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-
+from django.utils import timezone
 
 class RecordViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="me")
@@ -122,6 +122,8 @@ class RecordViewSet(viewsets.ViewSet):
                 return Response({"Notes already not shared."}, status=status.HTTP_400_BAD_REQUEST)
             
             record.is_notes_shared = False
+            record.updated_by = requester
+            record.updated_timestamp = timezone.now()
             record.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         
