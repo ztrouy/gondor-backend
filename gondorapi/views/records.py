@@ -1,4 +1,4 @@
-from gondorapi.models import PatientData, Log, PatientClinician
+from gondorapi.models import PatientData, Log, PatientClinician, Appointment
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -73,4 +73,36 @@ class RecordViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except PatientData.DoesNotExist:
-            return Response("Medical Record does not exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Medical Record does not exist", status=status.HTTP_404_NOT_FOUND)  
+          
+    def create(self,request):
+        user = request.user
+
+        authorized_user = user.groups.filter(name="Clinician").exists()
+        if not authorized_user:
+            return Response({"You are not authorized"}, status=status.HTTP_403_FORBIDDEN)
+        
+        appointment_id = request.data["appointment"]
+        try:
+            appointment = Appointment.objects.get(pk = appointment_id)
+
+            existing_record = PatientData.objects.filter(appointment = appointment)
+            if existing_record:
+                return Response({"Message": "Record already exists for this appointment"}, status=status.HTTP_409_CONFLICT)
+
+            serializer = PatientDataSerializers.PatientDataCreateSerializer(data=request.data, context={"request": request})
+            if serializer.is_valid():
+                patient_data = serializer.save()
+
+                return Response(patient_data.id, status=status.HTTP_201_CREATED)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Appointment.DoesNotExist:
+            return Response({"Appointment does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        
+       
+
+
+    
+

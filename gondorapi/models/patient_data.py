@@ -11,7 +11,7 @@ class PatientData(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_patient_data")
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="updated_patient_data")
     created_timestamp = models.DateTimeField(auto_now_add=True)
-    updated_timestamp = models.DateTimeField(auto_now=True, null=True)
+    updated_timestamp = models.DateTimeField(null=True)
     patient_systolic = models.IntegerField(validators=[MinValueValidator(0)])
     patient_diastolic = models.IntegerField(validators=[MinValueValidator(0)])
     patient_weight_kg = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0)])

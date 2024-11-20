@@ -1,7 +1,7 @@
 from gondorapi.models import PatientData
 from gondorapi.serializers import EmbeddedSerializers
 from rest_framework import serializers
-import datetime
+from django.utils import timezone
 
 
 class PatientDataSerializers:
@@ -81,5 +81,34 @@ class PatientDataSerializers:
             instance.patient_weight_kg = validated_data["patient_weight_kg"]
             instance.clinician_notes = validated_data["clinician_notes"]
             instance.updated_by = self.context["request"].user
+            instance.updated_timestamp = timezone.now()
             instance.save()
             return instance
+
+        
+    class PatientDataCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = PatientData
+            fields = ["patient", "appointment", "patient_systolic", "patient_diastolic", "patient_weight_kg", "clinician_notes", "is_notes_shared"]
+
+        def to_internal_value(self, data):
+            data = data.copy()
+            data["patient_systolic"] = data.pop("patientSystolic")
+            data["patient_diastolic"] = data.pop("patientDiastolic")
+            data["patient_weight_kg"] = data.pop("patientWeightKg")
+            data["clinician_notes"] = data.pop("clinicianNotes")
+            data["is_notes_shared"] = data.pop("isNotesShared")
+            return super().to_internal_value(data)
+        
+        def create(self, validated_data):
+            patient_data = PatientData.objects.create(
+                patient = validated_data["patient"],
+                appointment = validated_data["appointment"],
+                created_by = self.context["request"].user,
+                patient_systolic = validated_data["patient_systolic"],
+                patient_diastolic = validated_data["patient_diastolic"],
+                patient_weight_kg = validated_data["patient_weight_kg"],
+                clinician_notes = validated_data["clinician_notes"],
+                is_notes_shared = validated_data["is_notes_shared"]
+            )
+            return patient_data
