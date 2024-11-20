@@ -6,7 +6,6 @@ import uuid
 
 class UserAddress(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="active_addresses")
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     address_type = models.ForeignKey(AddressType, on_delete=models.CASCADE)
 
