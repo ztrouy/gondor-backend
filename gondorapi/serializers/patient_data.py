@@ -1,6 +1,7 @@
 from gondorapi.models import PatientData
 from gondorapi.serializers import EmbeddedSerializers
 from rest_framework import serializers
+import datetime
 
 
 class PatientDataSerializers:
@@ -59,3 +60,26 @@ class PatientDataSerializers:
             rep["patientDiastolic"] = rep.pop("patient_diastolic")
             rep["patientWeightKg"] = rep.pop("patient_weight_kg")
             return rep
+    
+
+    class PatientDataEditSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = PatientData
+            fields = ["patient_systolic", "patient_diastolic", "patient_weight_kg", "clinician_notes"]
+        
+        def to_internal_value(self, data):
+            data = data.copy()
+            data["patient_systolic"] = data.pop("patientSystolic")
+            data["patient_diastolic"] = data.pop("patientDiastolic")
+            data["patient_weight_kg"] = data.pop("patientWeightKg")
+            data["clinician_notes"] = data.pop("clinicianNotes")
+            return super().to_internal_value(data)
+        
+        def update(self, instance, validated_data):
+            instance.patient_systolic = validated_data["patient_systolic"]
+            instance.patient_diastolic = validated_data["patient_diastolic"]
+            instance.patient_weight_kg = validated_data["patient_weight_kg"]
+            instance.clinician_notes = validated_data["clinician_notes"]
+            instance.updated_by = self.context["request"].user
+            instance.save()
+            return instance
