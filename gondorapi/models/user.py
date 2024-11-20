@@ -29,6 +29,7 @@ class User(AbstractUser):
             ).first()
 
             return primary_address if primary_address else None
+        
         except AddressType.DoesNotExist:
             return None
     
