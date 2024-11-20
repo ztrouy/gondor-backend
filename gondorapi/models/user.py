@@ -23,14 +23,13 @@ class User(AbstractUser):
     def primary_address(self):
         try:
             primary_address_type = AddressType.objects.get(name="Primary Address")
-            user_address = self.active_addresses.get(address_type=primary_address_type)
-
-            if user_address:
-                return user_address.address
             
-            return None
-        
-        except:
+            primary_address = self.addresses.filter(
+                active_addresses__address_type=primary_address_type
+            ).first()
+
+            return primary_address if primary_address else None
+        except AddressType.DoesNotExist:
             return None
     
     @property
