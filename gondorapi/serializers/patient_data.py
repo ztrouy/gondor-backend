@@ -1,7 +1,7 @@
 from gondorapi.models import PatientData
 from gondorapi.serializers import EmbeddedSerializers
 from rest_framework import serializers
-import datetime
+from django.utils import timezone
 
 
 class PatientDataSerializers:
@@ -81,6 +81,7 @@ class PatientDataSerializers:
             instance.patient_weight_kg = validated_data["patient_weight_kg"]
             instance.clinician_notes = validated_data["clinician_notes"]
             instance.updated_by = self.context["request"].user
+            instance.updated_timestamp = timezone.now()
             instance.save()
             return instance
 
