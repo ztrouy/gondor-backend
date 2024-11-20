@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from gondorapi.serializers import PatientDataSerializers
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 
 class RecordViewSet(viewsets.ViewSet):
@@ -100,9 +101,32 @@ class RecordViewSet(viewsets.ViewSet):
         
         except Appointment.DoesNotExist:
             return Response({"Appointment does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["put"], url_path="share")
+    def share_notes(self, request, pk=None):
+        requester = request.user
+        is_clinician = requester.groups.filter(name="Clinician").exists()
+        if not is_clinician:
+            return Response("You are not a Clinician", status=status.HTTP_403_FORBIDDEN)
         
-       
+        try:
+            record = PatientData.objects.get(pk=pk)
+            patient = record.patient
 
+            is_provider = PatientClinician.objects.filter(patient=patient, clinician=requester).exists()
+            is_creator = requester == record.created_by
+            if not is_provider and not is_creator:
+                return Response("You are not allowed to edit this Medical Record", status=status.HTTP_403_FORBIDDEN)
+            
+            if record.is_notes_shared:
+                return Response("Notes already shared", status=status.HTTP_400_BAD_REQUEST)
+            
+            record.is_notes_shared = True
+            record.updated_by = requester
+            record.updated_timestamp = timezone.now()
+            record.save()
 
-    
-
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        except PatientData.DoesNotExist:
+            return Response("Medical Record does not exist", status=status.HTTP_404_NOT_FOUND)
